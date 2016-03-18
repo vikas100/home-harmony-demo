@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2056" systemVersion="12C60" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Brand" representedClassName="Brand" elementID="brandEntity" versionHashModifier="" syncable="YES">
+        <attribute name="brand_id" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES" isSyncIdentityProperty="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="icon" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ColorCategory" inverseName="brand" inverseEntity="ColorCategory" syncable="YES"/>
+    </entity>
+    <entity name="Color" representedClassName="Color" elementID="colorEntity" syncable="YES">
+        <attribute name="blue" attributeType="Integer 16" maxValueString="255" defaultValueString="0" syncable="YES"/>
+        <attribute name="code" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="color_id" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="green" attributeType="Integer 16" maxValueString="255" defaultValueString="0" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="red" attributeType="Integer 16" maxValueString="255" defaultValueString="0" syncable="YES"/>
+        <relationship name="category" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ColorCategory" inverseName="colors" inverseEntity="ColorCategory" syncable="YES"/>
+    </entity>
+    <entity name="ColorCategory" representedClassName="ColorCategory" elementID="colorCategoryEntity" syncable="YES">
+        <attribute name="category_id" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="group_size" attributeType="Integer 16" maxValueString="12" defaultValueString="5" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <relationship name="brand" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Brand" inverseName="categories" inverseEntity="Brand" syncable="YES"/>
+        <relationship name="colors" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Color" inverseName="category" inverseEntity="Color" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Brand" positionX="160" positionY="192" width="128" height="120"/>
+        <element name="Color" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="ColorCategory" positionX="160" positionY="192" width="128" height="120"/>
+    </elements>
+</model>
