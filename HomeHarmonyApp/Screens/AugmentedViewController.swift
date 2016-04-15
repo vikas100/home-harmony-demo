@@ -130,7 +130,7 @@ class AugmentedViewController: UIViewController, SidebarDelegate, ColorSelection
             }
             })
         
-        self.augmentedView.startedToolBlock = { (ToolMode toolMode) -> (Void) in
+        self.augmentedView.startedToolBlock = { (toolMode) -> (Void) in
             self.openColorMenu(false)
             if (toolMode == ToolModeRectangle) {
                 self.displayOptions(self.rectangleOptions, selectedItem: -1)
