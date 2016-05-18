@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -18,17 +18,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" misplaced="YES" image="Splash" translatesAutoresizingMaskIntoConstraints="NO" id="q0B-0s-Hc8">
-                                <rect key="frame" x="0.0" y="-4" width="604" height="1074"/>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" misplaced="YES" image="LaunchBG" translatesAutoresizingMaskIntoConstraints="NO" id="07w-eR-TM6">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.086274509799999996" green="0.65490196079999996" blue="0.90588235289999997" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="0.086274509799999996" green="0.65490196079999996" blue="0.90588235289999997" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="q0B-0s-Hc8" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="-18" id="OYN-P3-yiI"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="q0B-0s-Hc8" secondAttribute="trailing" constant="-18" id="OnQ-0U-KAD"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="q0B-0s-Hc8" secondAttribute="bottom" constant="-63" id="Oop-I4-l17"/>
-                            <constraint firstItem="q0B-0s-Hc8" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="-24" id="wm3-9R-bxW"/>
+                            <constraint firstItem="07w-eR-TM6" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="-20" id="92i-ea-ROh"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="07w-eR-TM6" secondAttribute="bottom" constant="-20" id="Liy-pZ-18Z"/>
+                            <constraint firstItem="07w-eR-TM6" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="-20" id="ROb-RO-MJL"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="07w-eR-TM6" secondAttribute="trailing" constant="-20" id="u6U-1P-3CE"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -38,6 +38,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Splash" width="375" height="667"/>
+        <image name="LaunchBG" width="375" height="667"/>
     </resources>
 </document>

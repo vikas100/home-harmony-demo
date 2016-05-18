@@ -40,7 +40,7 @@ class SampleTypeViewController: UICollectionViewController {
                 let basePath = "\(roomsPath!)/\(roomType)"
                 let projects = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(basePath)
                 if projects.count >= countPerType {
-                    for var index = 0; index < countPerType; ++index {
+                    for index in 0 ..< countPerType {
                         let singularRoomType = String(roomType.characters.dropLast())
                         roomExampleNames.addObject(NSLocalizedString(singularRoomType, comment:""))
                         roomExampleForType.addObject("\(basePath)/\(projects[index])")
