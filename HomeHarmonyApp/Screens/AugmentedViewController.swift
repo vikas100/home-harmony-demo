@@ -483,10 +483,11 @@ class AugmentedViewController: UIViewController, SidebarDelegate, ColorSelection
         self.augmentedView.captureToImagePainter { () -> Void in
             self.enableAR(false)
             
-            //TODO: some bug, set on palette not updating userData
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.colorChosen(sender, color: color)
-            })
+            if let col = color {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.colorChosen(sender, color: col)
+                })
+            }
         }
     }
     

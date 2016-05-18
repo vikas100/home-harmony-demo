@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="yFE-i7-5dF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Z8N-HD-Mk4">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -20,25 +20,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="900"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MainScreenTop" translatesAutoresizingMaskIntoConstraints="NO" id="p5W-Yc-28t">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MeridianN" translatesAutoresizingMaskIntoConstraints="NO" id="p5W-Yc-28t">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="160"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="160" id="l20-ks-sK2">
                                         <variation key="heightClass=regular-widthClass=regular" constant="280"/>
                                     </constraint>
                                 </constraints>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="MainScreenTopLogo" translatesAutoresizingMaskIntoConstraints="NO" id="dNT-k4-b1V">
-                                <rect key="frame" x="0.0" y="80" width="300" height="70"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="dNT-k4-b1V" secondAttribute="height" multiplier="30:7" id="WQX-I5-whW"/>
-                                </constraints>
-                                <variation key="widthClass=regular" misplaced="YES">
-                                    <rect key="frame" x="0.0" y="55" width="450" height="105"/>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
-                                    <rect key="frame" x="0.0" y="210" width="400" height="70"/>
-                                </variation>
                             </imageView>
                             <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ib1-Lo-l3o" userLabel="Main Actions View">
                                 <rect key="frame" x="0.0" y="170" width="600" height="150"/>
@@ -255,7 +243,6 @@
                             <constraint firstItem="ib1-Lo-l3o" firstAttribute="top" secondItem="p5W-Yc-28t" secondAttribute="bottom" constant="10" id="I49-ea-wlf"/>
                             <constraint firstItem="p5W-Yc-28t" firstAttribute="top" secondItem="xO3-05-18o" secondAttribute="bottom" constant="-20" id="OGm-L1-Np2"/>
                             <constraint firstItem="iFM-dZ-xR4" firstAttribute="leading" secondItem="DWW-2j-Zhh" secondAttribute="leadingMargin" constant="-20" id="PBf-hK-om2"/>
-                            <constraint firstItem="dNT-k4-b1V" firstAttribute="leading" secondItem="DWW-2j-Zhh" secondAttribute="leadingMargin" constant="-20" id="Rew-8m-Re5"/>
                             <constraint firstItem="Kli-pQ-Neg" firstAttribute="leading" secondItem="DWW-2j-Zhh" secondAttribute="leadingMargin" constant="-20" id="VEE-d0-zWs"/>
                             <constraint firstAttribute="trailingMargin" secondItem="iFM-dZ-xR4" secondAttribute="trailing" constant="-20" id="dt4-1f-fYU"/>
                             <constraint firstItem="ib1-Lo-l3o" firstAttribute="leading" secondItem="DWW-2j-Zhh" secondAttribute="leadingMargin" constant="-20" id="eML-xh-Tbb"/>
@@ -265,7 +252,6 @@
                             <constraint firstItem="V2D-Zt-B7p" firstAttribute="top" secondItem="Kli-pQ-Neg" secondAttribute="bottom" constant="-20" id="sWJ-l4-zUH"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ib1-Lo-l3o" secondAttribute="trailing" constant="-20" id="tpB-Xy-rZ6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="UWj-IV-Evp" secondAttribute="trailing" constant="-20" id="vLs-QB-d0Z"/>
-                            <constraint firstItem="dNT-k4-b1V" firstAttribute="bottom" secondItem="p5W-Yc-28t" secondAttribute="bottom" id="wAe-4Y-BfT"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Home Decorator" id="PS8-sr-pfF"/>
@@ -1485,76 +1471,6 @@
             </objects>
             <point key="canvasLocation" x="513" y="473"/>
         </scene>
-        <!--Launch View Controller-->
-        <scene sceneID="0Oi-fS-UMk">
-            <objects>
-                <viewController id="yFE-i7-5dF" customClass="LaunchViewController" customModule="HomeHarmonyApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ZyF-72-bu9"/>
-                        <viewControllerLayoutGuide type="bottom" id="jn5-gN-PQp"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="2Ne-yy-Ez6">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" image="LaunchBG" translatesAutoresizingMaskIntoConstraints="NO" id="61X-eh-V8E">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="620"/>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="MainScreenTopLogo" translatesAutoresizingMaskIntoConstraints="NO" id="aU4-ty-J6I">
-                                <rect key="frame" x="140" y="309" width="300" height="70"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="aU4-ty-J6I" secondAttribute="height" multiplier="30:7" id="2aC-Yj-QNr"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="2aC-Yj-QNr"/>
-                                    </mask>
-                                </variation>
-                                <variation key="widthClass=regular">
-                                    <mask key="constraints">
-                                        <include reference="2aC-Yj-QNr"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
-                                    <rect key="frame" x="250" y="365" width="450" height="105"/>
-                                </variation>
-                            </imageView>
-                        </subviews>
-                        <color key="backgroundColor" red="0.086274509799999996" green="0.65490196079999996" blue="0.90588235289999997" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="tintColor" red="0.086274509799999996" green="0.65490196079999996" blue="0.90588235289999997" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstItem="aU4-ty-J6I" firstAttribute="centerY" secondItem="2Ne-yy-Ez6" secondAttribute="centerY" id="2ow-bM-cP5"/>
-                            <constraint firstItem="aU4-ty-J6I" firstAttribute="centerX" secondItem="2Ne-yy-Ez6" secondAttribute="centerX" id="QDI-B2-wB8"/>
-                            <constraint firstItem="jn5-gN-PQp" firstAttribute="top" secondItem="61X-eh-V8E" secondAttribute="bottom" constant="-20" id="ZyH-Wx-a6z"/>
-                            <constraint firstItem="aU4-ty-J6I" firstAttribute="leading" secondItem="2Ne-yy-Ez6" secondAttribute="leadingMargin" constant="230" id="bu6-XN-2f6">
-                                <variation key="widthClass=regular" constant="80"/>
-                            </constraint>
-                            <constraint firstItem="61X-eh-V8E" firstAttribute="top" secondItem="ZyF-72-bu9" secondAttribute="bottom" constant="-20" id="l8X-5A-3aS"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="61X-eh-V8E" secondAttribute="trailing" constant="-20" id="lf3-de-LlS"/>
-                            <constraint firstItem="61X-eh-V8E" firstAttribute="leading" secondItem="2Ne-yy-Ez6" secondAttribute="leadingMargin" constant="-20" id="zq3-4d-sGF"/>
-                        </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="bu6-XN-2f6"/>
-                            </mask>
-                        </variation>
-                        <variation key="widthClass=regular">
-                            <mask key="constraints">
-                                <include reference="bu6-XN-2f6"/>
-                            </mask>
-                        </variation>
-                    </view>
-                    <navigationItem key="navigationItem" id="Nwz-sf-UF3"/>
-                    <nil key="simulatedTopBarMetrics"/>
-                    <connections>
-                        <outlet property="appIconView" destination="aU4-ty-J6I" id="21D-eq-UVj"/>
-                        <segue destination="Z8N-HD-Mk4" kind="showDetail" identifier="startApp" customClass="FadeSegue" customModule="HomeHarmonyApp" customModuleProvider="target" animates="NO" action="showViewController:sender:" id="dNa-Qg-dwq"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Hib-2q-dmN" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-364" y="485"/>
-        </scene>
         <!--Sidebar Table View Controller-->
         <scene sceneID="ElB-vG-EsC">
             <objects>
@@ -1801,9 +1717,7 @@
         <image name="CloseButton" width="30" height="30"/>
         <image name="FavoritesIcon" width="60" height="60"/>
         <image name="LargeCloseButton" width="60" height="60"/>
-        <image name="LaunchBG" width="375" height="667"/>
-        <image name="MainScreenTop" width="333" height="125"/>
-        <image name="MainScreenTopLogo" width="400" height="100"/>
+        <image name="MeridianN" width="1242" height="2208"/>
         <image name="PaintButton" width="30" height="30"/>
         <image name="ReshootButton" width="78" height="78"/>
         <image name="SaveButton" width="30" height="30"/>
