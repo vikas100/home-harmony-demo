@@ -30,6 +30,10 @@
 @property (assign, nonatomic) float detexturedAmount;
 @property (readonly, nonatomic) BOOL isMaskUtilized;
 
+@property (assign, nonatomic) Sheen sheen;
+@property (assign, nonatomic) Transparency transparency;
+@property (assign, nonatomic) Finish finish;
+
 @property (readonly, nonatomic) NSMutableDictionary *userData;
 @property (readonly, nonatomic) BOOL hasMadeChangesInMask;
 
