@@ -534,7 +534,7 @@
 				INFOPLIST_FILE = HomeHarmonyApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.arbiec.videopaint;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cambriantech.homeharmony;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "HomeHarmonyApp/HomeHarmonyApp-Bridging-Header.h";
 			};
@@ -552,7 +552,7 @@
 				INFOPLIST_FILE = HomeHarmonyApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.arbiec.videopaint;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cambriantech.homeharmony;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "HomeHarmonyApp/HomeHarmonyApp-Bridging-Header.h";
 			};
