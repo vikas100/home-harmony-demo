@@ -1,18 +1,13 @@
 # Home Harmony Demo
 This is a fully functional demo illustrating augmented reality in both still and video mode (CBCombinedPainter) and also featuring the ability to gather colors from a photo (CBColorFinder). 
 
-## CBCombinedPainter
+#### CBCombinedPainter
 CBCombinedPainter allows for both live video augmented reality and still based modifications of a photo. Its recommended operation is to first start the user in live mode CBCombinedPainter.startAugmentedReality, and then capture into still mode (CBCombinedPainter.captureToImagePainter). This allows for a seamless transition between both modes and a minimal user interface. CBCombinedPainter is a subclass of the CBImagePainter class, so it offers all of the still based methods and properties, while also allowing for moving back and forth between augmented reality and still painting (startAugmentedReality, stopAugmentedReality). CBImagePainter and as a consequence, CBCombinedPainter, its descendent, offers an ability to operate on gallery photos.
 
 ```
-@property (nonatomic, strong) NSString* runSFMTest;
-@property (nonatomic, assign) CGPoint paintPoint;
 @property (nonatomic, strong) UIColor *paintColor;
-@property (nonatomic, strong) UIImage *texture;
 @property (nonatomic, weak) GLKView *output;
 @property (nonatomic, readonly) BOOL isRunning;
-
-@property (nonatomic, strong) dispatch_queue_t cb_queue;
 
 + (CBVideoPainter *) getInstance;
 
@@ -28,7 +23,7 @@ void dispatch_cb_get_result(dispatch_block_t block);
 - (void) clearAll;
 ```
 
-### CBImagePainter
+#### CBImagePainter
 Although it is recommended to use the CBCombinedPainter object, some users may want to separate the usage of still based painter or not use augmented reality at all. 
 
 ```
@@ -151,7 +146,7 @@ Although it is recommended to use the CBCombinedPainter object, some users may w
 ```
 
 
-## CBColorFinder
+#### CBColorFinder
 CBColorFinder is a component with two basic methods. First it allows for a color to be pulled from an image averaged at a point and then it also can return N of the most common colors seen in an image. Additionally, a CBColoring class provides useful methods for finding how close a color is to another, and color theory features useul to users. When combined together an interface to help users pull colors from their photos is available. 
 
 ```
@@ -162,7 +157,7 @@ CBColorFinder is a component with two basic methods. First it allows for a color
 - (NSArray *) getMostCommonColors:(int)count type:(CBColorType)type;
 ```
 
-## CBColoring
+#### CBColoring
 
 ```
 + (NSArray *)complementsForColor:(UIColor *)color count:(int)count angle:(double)angleSpan;
