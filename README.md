@@ -4,26 +4,25 @@ This is a fully functional demo illustrating augmented reality in both still and
 #### CBCombinedPainter
 CBCombinedPainter allows for both live video augmented reality and still based modifications of a photo. Its recommended operation is to first start the user in live mode CBCombinedPainter.startAugmentedReality, and then capture into still mode (CBCombinedPainter.captureToImagePainter). This allows for a seamless transition between both modes and a minimal user interface. CBCombinedPainter is a subclass of the CBImagePainter class, so it offers all of the still based methods and properties, while also allowing for moving back and forth between augmented reality and still painting (startAugmentedReality, stopAugmentedReality). CBImagePainter and as a consequence, CBCombinedPainter, its descendent, offers an ability to operate on gallery photos.
 
+
+The following methods switch between still and video augmented reality. showAugmentedReality switches away from still mode and starts video based augmented reality. The showImagePainter method does the opposite.
 ```
-@property (nonatomic, strong) UIColor *paintColor;
-@property (nonatomic, weak) GLKView *output;
-@property (nonatomic, readonly) BOOL isRunning;
-
-+ (CBVideoPainter *) getInstance;
-
-void dispatch_cb(dispatch_block_t block);
-void dispatch_cb_get_result(dispatch_block_t block);
-
-- (BOOL) startRunning;
-- (BOOL) stopRunning;
-
-- (BOOL)captureCurrentState:(CBImagePainter*)imagePainter completed:(void (^)(void))block;
-- (BOOL)captureCurrentState:(void (^)(CBImagePainterImage *))block;
-
-- (void) clearAll;
+- (void) showAugmentedReality;
+- (void) showImagePainter;
 ```
 
-#### CBImagePainter
+To pause and resume augmented reality, use the following methods. Typically this is desired while the view is partially obstructed, such as during the presentation of a menu, although this is not required.
+```
+- (void) startAugmentedReality;
+- (void) stopAugmentedReality;
+```
+
+Calling captureToImagePainter stops augmented reality and loads the still painter with the captured image, entering still mode.
+```
+- (void) captureToImagePainter:(void (^)(void))block;
+```
+
+#### CBImagePainter (superclass of CBCombinedPainter)
 Although it is recommended to use the CBCombinedPainter object, some users may want to separate the usage of still based painter or not use augmented reality at all. 
 
 ```
