@@ -36,9 +36,11 @@ The following properties provide access to a UIImage object, useful for saving t
 @property (readonly, nonatomic) CBImagePainterImage *stillImage;
 ```
 
-###### Layering properties
-The current editLayer 
+###### Adding multiple paint colors and selecting each one
+Often users want multiple paint colors. This is accomplished through the method appendNewLayer to create. The current layer being painted or erased can be changed by setting the editLayerIndex and then using tools as normal.
 ```
+- (BOOL) appendNewLayer;
+- (BOOL) removeLayerAtIndex:(int)index;
 @property (readonly, nonatomic) CBLayer *editLayer;
 @property (assign, nonatomic) int editLayerIndex;
 ```
@@ -136,8 +138,6 @@ The current editLayer
 ```
 
 ```
-- (BOOL) appendNewLayer;
-- (BOOL) removeLayerAtIndex:(int)index;
 - (void) redraw;
 ```
 
