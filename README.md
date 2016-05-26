@@ -37,18 +37,22 @@ The following properties provide access to a UIImage object, useful for saving t
 ```
 
 ###### Adding multiple paint colors and selecting each one
-Often users want multiple paint colors. This is accomplished through the method appendNewLayer to create. The current layer being painted or erased can be changed by setting the editLayerIndex and then using tools as normal.
+Often users want multiple paint colors. This is accomplished through the method appendNewLayer to create. The current layer being painted or erased can be changed by setting the editLayerIndex and then using tools as normal. There is a limit to the number of layers that can be added, defined by maxLayerCount, while the total number of layers currently in the image is defined by layerCount.
 ```
 - (BOOL) appendNewLayer;
+@property (readonly, nonatomic) BOOL canAppendNewLayer;
+
 - (BOOL) removeLayerAtIndex:(int)index;
 @property (readonly, nonatomic) CBLayer *editLayer;
 @property (assign, nonatomic) int editLayerIndex;
+@property (readonly, nonatomic) int layerCount;
+@property (readonly, nonatomic) int maxLayerCount;
 ```
 
-###### Material choices
+###### Setting paint color
 ```
 @property (retain, nonatomic) UIColor *paintColor;
-@property (readonly, nonatomic) NSString *projectID;
+- (void) setPaintColor:(UIColor *)uiColor updateImage:(BOOL)updateImage;
 ```
 
 ###### Global appearance
@@ -58,37 +62,41 @@ Often users want multiple paint colors. This is accomplished through the method 
 
 ###### Tools
 ```
-@property (assign, nonatomic) BOOL autoZoomEnabled;
-@property (assign, nonatomic) BOOL autoBrushSizeEnabled;
-@property (assign, nonatomic) BOOL brushTapFillEnabled;
-@property (assign, nonatomic) BOOL smartBrushEnabled;
-@property (assign, nonatomic) BOOL rectSnapToEnabled;
 @property (assign, nonatomic) ToolMode toolMode;
 ```
 
 ```
+@property (assign, nonatomic) BOOL autoZoomEnabled;
+@property (assign, nonatomic) BOOL autoBrushSizeEnabled;
+@property (assign, nonatomic) BOOL brushTapFillEnabled;
+@property (assign, nonatomic) BOOL smartBrushEnabled;
 @property (assign, nonatomic) int brushSize;
+@property (assign, nonatomic) BOOL touchPaintEnabled;
+
+@property (assign, nonatomic) BOOL rectSnapToEnabled;
+- (void) commitChanges;
+- (void) decommitChanges;
+```
+
+###### Undo history, stepping backwards
+```
 @property (assign, nonatomic) int maxHistorySize;
-@property (assign, nonatomic) BOOL canZoom;
-@property (readonly, nonatomic) CGFloat zoomScale;
 @property (readonly, nonatomic) BOOL canStepBackward;
 @property (assign, nonatomic) BOOL hasMadeChanges;
 @property (readonly, nonatomic) BOOL hasChangesToCommit;
+- (void) stepBackward;
+- (void) clearHistory;
 ```
 
+###### Zooming
 ```
-@property (readonly, nonatomic) int layerCount;
-@property (readonly, nonatomic) int maxLayerCount;
-@property (readonly, nonatomic) BOOL canAppendNewLayer;
-@property (assign, nonatomic) BOOL touchPaintEnabled;
-@property (assign, nonatomic) BOOL allowColorAdjustment;
-```
-
-```
-@property (assign, nonatomic) float alphaIntensity;
-@property (assign, nonatomic) float betaIntensity;
+@property (assign, nonatomic) BOOL canZoom;
+@property (readonly, nonatomic) CGFloat zoomScale;
+- (void) zoomOut;
 ```
 
+
+###### Callbacks
 ```
 @property (nonatomic, copy) void(^busyLoadingBlock)(BOOL completed);
 
@@ -104,54 +112,27 @@ Often users want multiple paint colors. This is accomplished through the method 
 ```
 
 ```
+- (void) setStillImage:(CBImagePainterImage *)stillImage; //required for CBVideoPainter
 - (void) loadImage:(UIImage *)largeImage hasAlphaMasking:(BOOL)hasAlphaMasking;
-```
-
-```
-- (BOOL) loadProject:(NSString *)projectID fromDirectory:(NSString *)directoryPath;
-```
-
-```
-- (NSString *) saveProjectToDirectory:(NSString *)directoryPath saveState:(BOOL)saveState;
-```
-
-```
-+ (NSString *) cloneProject:(NSString *)path projectID:(NSString *)projectID;
-```
-
-```
-- (void) setPaintColor:(UIColor *)uiColor updateImage:(BOOL)updateImage;
-```
-
-```
 - (UIImage *) getRenderedImage;
 ```
 
 ```
-- (void) stepBackward;
-- (void) clearHistory;
+@property (readonly, nonatomic) NSString *projectID;
+- (BOOL) loadProject:(NSString *)projectID fromDirectory:(NSString *)directoryPath;
+- (NSString *) saveProjectToDirectory:(NSString *)directoryPath saveState:(BOOL)saveState;
++ (NSString *) cloneProject:(NSString *)path projectID:(NSString *)projectID;
 ```
 
-```
-- (void) commitChanges;
-- (void) decommitChanges;
-```
-
+###### Additional methods
+Force a redraw of the image:
 ```
 - (void) redraw;
 ```
 
+To clear all paint colors and all changes to masks:
 ```
-- (void) setStillImage:(CBImagePainterImage *)stillImage; //required for CBVideoPainter
-```
-
-```
-- (void) cloneProject;
 - (void) clearAll;
-```
-
-```
-- (void) zoomOut;
 ```
 
 
