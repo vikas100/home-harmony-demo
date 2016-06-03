@@ -3,12 +3,10 @@ This is a fully functional demo illustrating augmented reality in both still and
 
 #### Prerequisites
 
-*Install git-LFS*
+###### Install git-LFS
 The framework is rather large prior to compilation and therefore requires git-lfs to be installed to download the HomeAugmentation.framework from this repository. Instructions on installing git-lfs are here. If you are using a client such as tower or sourcetree, make sure the the application is referencing the correct version of git that you installed.
 
-```
-Git LFS may be found here: <https://git-lfs.github.com/>
-```
+Git LFS may be found here: https://git-lfs.github.com/
 
 #### CBCombinedPainter
 CBCombinedPainter allows for both live video augmented reality and still based modifications of a photo. Its recommended operation is to first start the user in live mode CBCombinedPainter.startAugmentedReality, and then capture into still mode (CBCombinedPainter.captureToImagePainter). This allows for a seamless transition between both modes and a minimal user interface. CBCombinedPainter is a subclass of the CBImagePainter class, so it offers all of the still based methods and properties, while also allowing for moving back and forth between augmented reality and still painting (startAugmentedReality, stopAugmentedReality). CBImagePainter and as a consequence, CBCombinedPainter, its descendent, offers an ability to operate on gallery photos.
