@@ -7,7 +7,7 @@ This is a fully functional demo illustrating augmented reality in both still and
 The framework is rather large prior to compilation and therefore requires git-lfs to be installed to download the HomeAugmentation.framework from this repository. Instructions on installing git-lfs are here. If you are using a client such as tower or sourcetree, make sure the the application is referencing the correct version of git that you installed.
 
 ```
-Git LFS may be found here: https://git-lfs.github.com/
+Git LFS may be found here: <https://git-lfs.github.com/>
 ```
 
 #### CBCombinedPainter
