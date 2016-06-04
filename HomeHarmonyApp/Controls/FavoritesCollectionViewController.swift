@@ -121,18 +121,7 @@ class FavoritesCollectionViewController: UICollectionViewController {
         
         return cell
     }
-    
-    // MARK: UICollectionViewDelegate
-    
-    override func collectionView(collectionView: UICollectionView, canFocusItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        /*
-        Return `false` because we don't want this `collectionView`'s cells to
-        become focused. Instead the `UICollectionView` contained in the cell
-        should become focused.
-        */
-        return true
-    }
-    
+        
     func projectSelected(projectPath:String) {
         //selectedProjectPath = projectPath
         performSegueWithIdentifier("showPainter", sender: self)
