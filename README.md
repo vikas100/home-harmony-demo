@@ -8,6 +8,18 @@ The framework is rather large prior to compilation and therefore requires git-lf
 
 Git LFS may be found here: https://git-lfs.github.com/
 
+#### Installation
+Embed the binary into your project by dropping the framework into the Embedded Binaries section.
+
+###### Run Script Build phase:
+Add the following shell script as a "New Run Script" in XCode for your app's target. This is necessary to strip out the x86 contents prior to release to the app store or installation onto a device. We must package both the x86 and arm slices in one embedded binary. Because apple does not provide this facility, this script is necessary
+
+```
+if [ -f "${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/HomeAugmentation.framework/strip-frameworks.sh" ]; then
+bash "${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/HomeAugmentation.framework/strip-frameworks.sh"
+fi
+```
+
 #### CBCombinedPainter
 CBCombinedPainter allows for both live video augmented reality and still based modifications of a photo. Its recommended operation is to first start the user in live mode CBCombinedPainter.startAugmentedReality, and then capture into still mode (CBCombinedPainter.captureToImagePainter). This allows for a seamless transition between both modes and a minimal user interface. CBCombinedPainter is a subclass of the CBImagePainter class, so it offers all of the still based methods and properties, while also allowing for moving back and forth between augmented reality and still painting (startAugmentedReality, stopAugmentedReality). CBImagePainter and as a consequence, CBCombinedPainter, its descendent, offers an ability to operate on gallery photos.
 
