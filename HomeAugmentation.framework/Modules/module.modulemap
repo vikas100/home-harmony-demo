@@ -1,0 +1,6 @@
+framework module HomeAugmentation {
+  umbrella header "HomeAugmentation.h"
+
+  export *
+  module * { export * }
+}

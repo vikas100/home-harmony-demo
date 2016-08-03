@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        CBLicensing.enableWithKey("75d5b1095e424d07bd1ce267d4472ee5")
+        CBLicensing.enableWithKey("047e078ef60b4f219ad988d6c555d79d")
         let db = CBCoreData.sharedInstance() as! CBCoreData
         db.databaseName = "ColorModel.sqlite"
         

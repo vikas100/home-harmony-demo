@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E70654961C9B745B00282BDF /* HomeAugmentation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E70654951C9B745B00282BDF /* HomeAugmentation.framework */; };
 		E70654981C9B749500282BDF /* Rooms in Resources */ = {isa = PBXBuildFile; fileRef = E70654971C9B749500282BDF /* Rooms */; };
 		E715EE341BFBD3E800A148B3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E715EE331BFBD3E800A148B3 /* CoreMotion.framework */; };
 		E715EE361BFBD41300A148B3 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E715EE351BFBD41300A148B3 /* ImageIO.framework */; };
@@ -67,10 +66,25 @@
 		E7E29E781BFBD2EB001B5D49 /* LandingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7E29E741BFBD2EB001B5D49 /* LandingViewController.swift */; };
 		E7E29E791BFBD2EB001B5D49 /* AugmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7E29E751BFBD2EB001B5D49 /* AugmentedViewController.swift */; };
 		E7E29E7C1BFBD394001B5D49 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7E29E7B1BFBD394001B5D49 /* Accelerate.framework */; };
+		E7F4E9501D51BAEE0032A9EF /* HomeAugmentation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7F4E94F1D51BAEE0032A9EF /* HomeAugmentation.framework */; };
+		E7F4E9511D51BAEE0032A9EF /* HomeAugmentation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E7F4E94F1D51BAEE0032A9EF /* HomeAugmentation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		E779261B1D51AF8A00196A06 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E7F4E9511D51BAEE0032A9EF /* HomeAugmentation.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		E70654951C9B745B00282BDF /* HomeAugmentation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HomeAugmentation.framework; sourceTree = "<group>"; };
 		E70654971C9B749500282BDF /* Rooms */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Rooms; sourceTree = "<group>"; };
 		E715EE331BFBD3E800A148B3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		E715EE351BFBD41300A148B3 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -142,6 +156,7 @@
 		E7E29E741BFBD2EB001B5D49 /* LandingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandingViewController.swift; sourceTree = "<group>"; };
 		E7E29E751BFBD2EB001B5D49 /* AugmentedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AugmentedViewController.swift; sourceTree = "<group>"; };
 		E7E29E7B1BFBD394001B5D49 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		E7F4E94F1D51BAEE0032A9EF /* HomeAugmentation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HomeAugmentation.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,7 +168,7 @@
 				E715EE361BFBD41300A148B3 /* ImageIO.framework in Frameworks */,
 				E7449B7D1C10CF4800E6F88E /* Photos.framework in Frameworks */,
 				E715EE341BFBD3E800A148B3 /* CoreMotion.framework in Frameworks */,
-				E70654961C9B745B00282BDF /* HomeAugmentation.framework in Frameworks */,
+				E7F4E9501D51BAEE0032A9EF /* HomeAugmentation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,7 +178,6 @@
 		E71A36D01BF9ADB100F5C36E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E70654951C9B745B00282BDF /* HomeAugmentation.framework */,
 				E7449B7C1C10CF4800E6F88E /* Photos.framework */,
 				E715EE351BFBD41300A148B3 /* ImageIO.framework */,
 				E715EE331BFBD3E800A148B3 /* CoreMotion.framework */,
@@ -215,6 +229,7 @@
 		E7A84AD61BF9A5B9006572E9 = {
 			isa = PBXGroup;
 			children = (
+				E7F4E94F1D51BAEE0032A9EF /* HomeAugmentation.framework */,
 				E7A84AE11BF9A5B9006572E9 /* HomeHarmonyApp */,
 				E71A36D01BF9ADB100F5C36E /* Frameworks */,
 				E7A84AE01BF9A5B9006572E9 /* Products */,
@@ -300,6 +315,8 @@
 				E7A84ADB1BF9A5B9006572E9 /* Sources */,
 				E7A84ADC1BF9A5B9006572E9 /* Frameworks */,
 				E7A84ADD1BF9A5B9006572E9 /* Resources */,
+				E779261B1D51AF8A00196A06 /* Embed Frameworks */,
+				E779262C1D51BAA100196A06 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -372,6 +389,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		E779262C1D51BAA100196A06 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -f \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/HomeAugmentation.framework/strip-frameworks.sh\" ]; then\nbash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/HomeAugmentation.framework/strip-frameworks.sh\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E7A84ADB1BF9A5B9006572E9 /* Sources */ = {
@@ -532,9 +565,9 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = HomeHarmonyApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cambriantech.homeharmony;
+				PRODUCT_BUNDLE_IDENTIFIER = com.doubleip.mobile.durostickcolors;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "HomeHarmonyApp/HomeHarmonyApp-Bridging-Header.h";
 			};
@@ -550,9 +583,9 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = HomeHarmonyApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cambriantech.homeharmony;
+				PRODUCT_BUNDLE_IDENTIFIER = com.doubleip.mobile.durostickcolors;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "HomeHarmonyApp/HomeHarmonyApp-Bridging-Header.h";
 			};
