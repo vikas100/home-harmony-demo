@@ -14,7 +14,7 @@ public extension UIWindow {
         return UIWindow.getVisibleViewControllerFrom(self.rootViewController)
     }
     
-    public static func getVisibleViewControllerFrom(vc: UIViewController?) -> UIViewController? {
+    public static func getVisibleViewControllerFrom(_ vc: UIViewController?) -> UIViewController? {
         if let nc = vc as? UINavigationController {
             return UIWindow.getVisibleViewControllerFrom(nc.visibleViewController)
         } else if let tc = vc as? UITabBarController {
@@ -36,55 +36,55 @@ class LibraryThumbnailButton: UIButton {
     @IBInspectable var borderWidth: CGFloat = 1.0
     
     var hasPhotoLibrary = false
-    var authorizationStatus: PHAuthorizationStatus = .NotDetermined
+    var authorizationStatus: PHAuthorizationStatus = .notDetermined
     
     var targetReceiver: NSObject!
     var targetSelector: Selector!
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         if (self.hasPhotoLibrary) {
-            super.drawRect(rect)
+            super.draw(rect)
         }
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.contentMode = UIViewContentMode.ScaleAspectFill
-        self.imageView!.contentMode = UIViewContentMode.ScaleAspectFill;
-        self.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Fill;
-        self.contentVerticalAlignment = UIControlContentVerticalAlignment.Fill;
+        self.contentMode = UIViewContentMode.scaleAspectFill
+        self.imageView!.contentMode = UIViewContentMode.scaleAspectFill;
+        self.contentHorizontalAlignment = UIControlContentHorizontalAlignment.fill;
+        self.contentVerticalAlignment = UIControlContentVerticalAlignment.fill;
         
-        self.opaque = false
-        self.backgroundColor = UIColor.clearColor()
+        self.isOpaque = false
+        self.backgroundColor = UIColor.clear
         self.layer.cornerRadius = self.borderRadius;
         self.layer.borderWidth = self.borderWidth;
-        self.layer.borderColor = self.tintColor.CGColor;
+        self.layer.borderColor = self.tintColor.cgColor;
         self.clipsToBounds = true
         
         //transfer all actions
         if (self.targetReceiver == nil) {
-            self.allTargets().forEach { (object) -> () in
-                if let actions = self.actionsForTarget(object, forControlEvent: UIControlEvents.TouchUpInside) {
+            self.allTargets.forEach { (object) -> () in
+                if let actions = self.actions(forTarget: object, forControlEvent: UIControlEvents.touchUpInside) {
                     actions.forEach({ (action) -> () in
-                        self.targetReceiver = object
+                        self.targetReceiver = object as NSObject!
                         self.targetSelector = NSSelectorFromString(action)
-                        self.removeTarget(object, action: NSSelectorFromString(action), forControlEvents: UIControlEvents.TouchUpInside)
+                        self.removeTarget(object, action: NSSelectorFromString(action), for: UIControlEvents.touchUpInside)
                     })
                 }
             }
             
             if let _ = self.targetSelector {
-                self.addTarget(self, action: "openLibrary", forControlEvents: UIControlEvents.TouchUpInside)
+                self.addTarget(self, action: #selector(LibraryThumbnailButton.openLibrary), for: UIControlEvents.touchUpInside)
             }
         }
         
-        if (authorizationStatus == .NotDetermined) {
+        if (authorizationStatus == .notDetermined) {
             authorizationStatus = PHPhotoLibrary.authorizationStatus()
-            if (authorizationStatus == .Authorized) {
+            if (authorizationStatus == .authorized) {
                 self.loadFirstPhotoImage()
             } else {
-                self.setImage(UIImage(named: "LibraryButton"), forState: .Normal)
+                self.setImage(UIImage(named: "LibraryButton"), for: UIControlState())
             }
         }
     }
@@ -92,13 +92,13 @@ class LibraryThumbnailButton: UIButton {
     func openLibrary() {
         let previousStatus = authorizationStatus
         if let activeController = window?.visibleViewController {
-            ImageManager.sharedInstance.getImage(activeController, type:.PhotoLibrary) { (image) -> Void in
+            ImageManager.sharedInstance.getImage(activeController, type:.photoLibrary) { (image) -> Void in
                 self.authorizationStatus = PHPhotoLibrary.authorizationStatus()
-                if (previousStatus == .NotDetermined && self.authorizationStatus == .Authorized) {
+                if (previousStatus == .notDetermined && self.authorizationStatus == .authorized) {
                     self.loadFirstPhotoImage()
                 }
                 
-                self.targetReceiver.performSelectorOnMainThread(self.targetSelector, withObject: image, waitUntilDone: false)
+                self.targetReceiver.performSelector(onMainThread: self.targetSelector, with: image, waitUntilDone: false)
             }
         }
     }
@@ -111,21 +111,21 @@ class LibraryThumbnailButton: UIButton {
             NSSortDescriptor(key: "creationDate", ascending: false)
         ]
         
-        let results = PHAsset.fetchAssetsWithMediaType(.Image, options: options)
+        let results = PHAsset.fetchAssets(with: .image, options: options)
         
         if (results.count > 0) {
             let asset = results[0] as? PHAsset
-            PHImageManager.defaultManager().requestImageForAsset(asset!,
+            PHImageManager.default().requestImage(for: asset!,
                 targetSize: CGSize(width: 2 * self.frame.size.width, height: 2 * self.frame.size.height),
-                contentMode: .AspectFill,
+                contentMode: .aspectFill,
                 options: nil) { (finalResult, _) in
-                    self.setImage(finalResult, forState: .Normal)
+                    self.setImage(finalResult, for: UIControlState())
                     self.hasPhotoLibrary = true
             }
         } else {
-            self.hidden = true
-            self.enabled = false
-            self.userInteractionEnabled = false
+            self.isHidden = true
+            self.isEnabled = false
+            self.isUserInteractionEnabled = false
         }
     }
 }

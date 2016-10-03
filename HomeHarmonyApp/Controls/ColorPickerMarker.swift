@@ -13,23 +13,23 @@ class ColorPickerMarker: UIView {
     
     @IBInspectable var borderSize:CGFloat = 3.0
     
-    private var color: UIColor!;
+    fileprivate var color: UIColor!;
     
     override var backgroundColor: UIColor?  {
         didSet {
-            if (backgroundColor != UIColor.clearColor()) {
+            if (backgroundColor != UIColor.clear) {
                 color = backgroundColor
-                self.backgroundColor = UIColor.clearColor();
+                self.backgroundColor = UIColor.clear;
             }
         }
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         
-        self.opaque = false
+        self.isOpaque = false
         
-        CGContextClearRect(context, rect)
+        context?.clear(rect)
         
         if let color = color {
             
@@ -39,13 +39,13 @@ class ColorPickerMarker: UIView {
 //            var saturation:CGFloat = 0
 //            color.getHue(&hue, saturation: &saturation, brightness: &intensity, alpha: nil)
             
-            CGContextSetFillColorWithColor(context, color.CGColor)
-            CGContextFillEllipseInRect(context, rect)
+            context?.setFillColor(color.cgColor)
+            context?.fillEllipse(in: rect)
             
-            CGContextSetStrokeColorWithColor(context, self.tintColor.CGColor)
-            CGContextSetLineWidth(context, borderSize);
+            context?.setStrokeColor(self.tintColor.cgColor)
+            context?.setLineWidth(borderSize);
             
-            CGContextStrokeEllipseInRect(context, CGRect(x: borderSize/2.0, y: borderSize/2.0, width: rect.width - borderSize, height: rect.height - borderSize))
+            context?.strokeEllipse(in: CGRect(x: borderSize/2.0, y: borderSize/2.0, width: rect.width - borderSize, height: rect.height - borderSize))
             
         }
     }

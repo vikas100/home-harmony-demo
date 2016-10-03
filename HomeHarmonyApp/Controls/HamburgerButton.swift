@@ -13,23 +13,23 @@ class HamburgerButton: UIButton {
     
     @IBInspectable var lineWidth: CGFloat = 3
     
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         
         let context = UIGraphicsGetCurrentContext()
-        CGContextClearRect(context, rect)
+        context?.clear(rect)
         
         let availableHeight = self.frame.size.height - self.contentEdgeInsets.top - self.contentEdgeInsets.bottom
         let lineSpacing = (availableHeight - lineWidth * 3) / 2
         let lineLength = self.frame.size.width - self.contentEdgeInsets.left - self.contentEdgeInsets.right
         
-        CGContextSetFillColorWithColor(context, self.currentTitleColor.CGColor)
+        context?.setFillColor(self.currentTitleColor.cgColor)
         
-        CGContextFillRect(context, CGRectMake(self.contentEdgeInsets.left, self.contentEdgeInsets.top, lineLength, lineWidth))
+        context?.fill(CGRect(x: self.contentEdgeInsets.left, y: self.contentEdgeInsets.top, width: lineLength, height: lineWidth))
         
-        CGContextFillRect(context, CGRectMake(self.contentEdgeInsets.left, self.contentEdgeInsets.top + lineWidth + lineSpacing, lineLength, lineWidth))
+        context?.fill(CGRect(x: self.contentEdgeInsets.left, y: self.contentEdgeInsets.top + lineWidth + lineSpacing, width: lineLength, height: lineWidth))
         
-        CGContextFillRect(context, CGRectMake(self.contentEdgeInsets.left, self.contentEdgeInsets.top + 2 * (lineWidth + lineSpacing), lineLength, lineWidth))
+        context?.fill(CGRect(x: self.contentEdgeInsets.left, y: self.contentEdgeInsets.top + 2 * (lineWidth + lineSpacing), width: lineLength, height: lineWidth))
         
     }
 }

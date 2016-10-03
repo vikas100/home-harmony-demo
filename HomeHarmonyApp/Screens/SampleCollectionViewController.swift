@@ -14,25 +14,25 @@ class SampleCollectionViewController: UICollectionViewController, SampleCellDele
     
     weak internal var delegate: SampleCellDelegate?
     
-    private var roomTypes : NSMutableArray = []
-    private var roomExampleForType : NSMutableArray = []
+    fileprivate var roomTypes : NSMutableArray = []
+    fileprivate var roomExampleForType : NSMutableArray = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.hidden = false
+        self.navigationController?.navigationBar.isHidden = false
         
         let roomsPath = getSampleBasePath()
         
         do {
-            let rawRoomTypes = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(roomsPath)
+            let rawRoomTypes = try FileManager.default.contentsOfDirectory(atPath: roomsPath!)
             
             for roomType in rawRoomTypes {
                 let basePath = "\(roomsPath!)/\(roomType)"
-                let projects = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(basePath)
+                let projects = try FileManager.default.contentsOfDirectory(atPath: basePath)
                 if projects.count > 0 {
-                    roomTypes.addObject(NSLocalizedString(roomType, comment:""))
-                    roomExampleForType.addObject("\(basePath)/\(projects[0])")
+                    roomTypes.add(NSLocalizedString(roomType, comment:""))
+                    roomExampleForType.add("\(basePath)/\(projects[0])")
                 }
             }
         }
@@ -41,8 +41,8 @@ class SampleCollectionViewController: UICollectionViewController, SampleCellDele
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
-        self.navigationController?.navigationBar.hidden = false
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = false
     }
     
     override func didReceiveMemoryWarning() {
@@ -62,27 +62,27 @@ class SampleCollectionViewController: UICollectionViewController, SampleCellDele
     
     // MARK: UICollectionViewDataSource
     
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
         return roomTypes.count
     }
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath)  as! SampleTypeCollectionViewCell
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)  as! SampleTypeCollectionViewCell
         
-        let roomType = roomTypes[indexPath.row] as! String
+        let roomType = roomTypes[(indexPath as NSIndexPath).row] as! String
         cell.configureWithRoomType(roomType)
         cell.delegate = self
         
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         
         let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout
         
@@ -92,9 +92,9 @@ class SampleCollectionViewController: UICollectionViewController, SampleCellDele
         
     }
     
-    func sampleSelected(samplePath:String) {
+    func sampleSelected(_ samplePath:String) {
         
-        self.navigationController!.popViewControllerAnimated(false)
+        self.navigationController!.popViewController(animated: false)
         self.delegate?.sampleSelected(samplePath)
         //self.performSegueWithIdentifier("showSampleProject", sender: self)
     }

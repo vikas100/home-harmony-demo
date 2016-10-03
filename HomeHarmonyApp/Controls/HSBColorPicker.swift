@@ -9,7 +9,7 @@
 import Foundation
 
     internal protocol HSBColorPickerDelegate : NSObjectProtocol {
-        func HSBColorColorPickerTouched(sender:HSBColorPicker, color:UIColor, point:CGPoint, state:UIGestureRecognizerState)
+        func HSBColorColorPickerTouched(_ sender:HSBColorPicker, color:UIColor, point:CGPoint, state:UIGestureRecognizerState)
     }
 
     @IBDesignable
@@ -25,11 +25,11 @@ import Foundation
             }
         }
         
-        private func initialize() {
+        fileprivate func initialize() {
             self.clipsToBounds = true
-            let touchGesture = UILongPressGestureRecognizer(target: self, action: "touchedColor:")
+            let touchGesture = UILongPressGestureRecognizer(target: self, action: #selector(HSBColorPicker.touchedColor(_:)))
             touchGesture.minimumPressDuration = 0
-            touchGesture.allowableMovement = CGFloat.max
+            touchGesture.allowableMovement = CGFloat.greatestFiniteMagnitude
             self.addGestureRecognizer(touchGesture)
         }
         
@@ -43,24 +43,24 @@ import Foundation
             initialize()
         }
         
-        override func drawRect(rect: CGRect) {
+        override func draw(_ rect: CGRect) {
             let context = UIGraphicsGetCurrentContext()
             
-            for var y = CGFloat(0.0); y < rect.height; y=y+elementSize {
+            for y in stride(from: 0, to: rect.height, by: elementSize) {
                 var saturation = y < rect.height / 2.0 ? CGFloat(2 * y) / rect.height : 2.0 * CGFloat(rect.height - y) / rect.height
                 saturation = CGFloat(powf(Float(saturation), y < rect.height / 2.0 ? saturationExponentTop : saturationExponentBottom))
                 let brightness = y < rect.height / 2.0 ? CGFloat(1.0) : 2.0 * CGFloat(rect.height - y) / rect.height
                 
-                for var x = CGFloat(0.0); x < rect.width; x=x+elementSize {
+                for x in stride(from: 0, to: rect.width, by: elementSize) {
                     let hue = x / rect.width
                     let color = UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: 1.0)
-                    CGContextSetFillColorWithColor(context, color.CGColor)
-                    CGContextFillRect(context, CGRect(x:x, y:y, width:elementSize,height:elementSize))
+                    context?.setFillColor(color.cgColor)
+                    context?.fill(CGRect(x:x, y:y, width:elementSize,height:elementSize))
                 }
             }
         }
         
-        func getColorAtPoint(point:CGPoint) -> UIColor {
+        func getColorAtPoint(_ point:CGPoint) -> UIColor {
             let roundedPoint = CGPoint(x:elementSize * CGFloat(Int(point.x / elementSize)),
                                        y:elementSize * CGFloat(Int(point.y / elementSize)))
             var saturation = roundedPoint.y < self.bounds.height / 2.0 ? CGFloat(2 * roundedPoint.y) / self.bounds.height
@@ -71,7 +71,7 @@ import Foundation
             return UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: 1.0)
         }
         
-        func getPointForColor(color:UIColor) -> CGPoint {
+        func getPointForColor(_ color:UIColor) -> CGPoint {
             var hue:CGFloat=0;
             var saturation:CGFloat=0;
             var brightness:CGFloat=0;
@@ -93,8 +93,8 @@ import Foundation
             return CGPoint(x: xPos, y: yPos)
         }
         
-        func touchedColor(gestureRecognizer: UILongPressGestureRecognizer){
-            let point = gestureRecognizer.locationInView(self)
+        func touchedColor(_ gestureRecognizer: UILongPressGestureRecognizer){
+            let point = gestureRecognizer.location(in: self)
             let color = getColorAtPoint(point)
             
             self.delegate?.HSBColorColorPickerTouched(self, color: color, point: point, state:gestureRecognizer.state)

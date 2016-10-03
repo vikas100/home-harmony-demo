@@ -13,46 +13,46 @@ class ImageManager:NSObject, UIImagePickerControllerDelegate, UINavigationContro
     
     static var sharedInstance = ImageManager()
     
-    var videoStatus = AVAuthorizationStatus.NotDetermined
-    var photoStatus = PHAuthorizationStatus.NotDetermined
+    var videoStatus = AVAuthorizationStatus.notDetermined
+    var photoStatus = PHAuthorizationStatus.notDetermined
     
     override init() {
         super.init()
-        self.videoStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
+        self.videoStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
         self.photoStatus = PHPhotoLibrary.authorizationStatus();
     }
     
-    private var callback:((image: UIImage?) -> Void)!
+    fileprivate var callback:((_ image: UIImage?) -> Void)!
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         
-        picker.dismissViewControllerAnimated(true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
         
         if let cb = callback {
-            cb(image: chosenImage)
+            cb(chosenImage)
         }
         self.callback = nil
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        picker.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
         
         if let cb = callback {
-            cb(image: nil)
+            cb(nil)
         }
         self.callback = nil
     }
     
-    func proceedWithCameraAccess(controller: UIViewController, handler: ((Void) -> Void)) {
+    func proceedWithCameraAccess(_ controller: UIViewController, handler: @escaping ((Void) -> Void)) {
         
-        if (self.videoStatus == .Authorized) {
-            dispatch_async(dispatch_get_main_queue(), handler)
+        if (self.videoStatus == .authorized) {
+            DispatchQueue.main.async(execute: handler)
         } else {
             self.askForCameraAccess(controller, handler: { (status) -> Void in
-                if status == .Authorized {
+                if status == .authorized {
                     //continue
-                    dispatch_async(dispatch_get_main_queue(), handler)
+                    DispatchQueue.main.async(execute: handler)
                 } else {
                     self.noCameraAccessAlert(controller, showSettings: true)
                 }
@@ -60,28 +60,28 @@ class ImageManager:NSObject, UIImagePickerControllerDelegate, UINavigationContro
         }
     }
     
-    func askForCameraAccess(controller: UIViewController, handler: ((AVAuthorizationStatus) -> Void)!) {
-        AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: {
+    func askForCameraAccess(_ controller: UIViewController, handler: ((AVAuthorizationStatus) -> Void)!) {
+        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: {
             granted in
             
-            self.videoStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
+            self.videoStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
             
             if let handler = handler {
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     handler(self.videoStatus)
                 })
             }
         })
     }
     
-    func proceedWithPhotoAccess(controller: UIViewController, handler: ((Void) -> Void)) {
-        if (self.photoStatus == .Authorized) {
-            dispatch_async(dispatch_get_main_queue(), handler)
+    func proceedWithPhotoAccess(_ controller: UIViewController, handler: @escaping ((Void) -> Void)) {
+        if (self.photoStatus == .authorized) {
+            DispatchQueue.main.async(execute: handler)
         } else {
             self.askForPhotosAccess(controller, handler: { (status) -> Void in
-                if status == .Authorized {
+                if status == .authorized {
                     //continue
-                    dispatch_async(dispatch_get_main_queue(), handler)
+                    DispatchQueue.main.async(execute: handler)
                 } else {
                     self.noCameraAccessAlert(controller, showSettings: true)
                 }
@@ -89,13 +89,13 @@ class ImageManager:NSObject, UIImagePickerControllerDelegate, UINavigationContro
         }
     }
     
-    func askForPhotosAccess(controller: UIViewController, handler: ((PHAuthorizationStatus) -> Void)!) {
+    func askForPhotosAccess(_ controller: UIViewController, handler: ((PHAuthorizationStatus) -> Void)!) {
         
         PHPhotoLibrary.requestAuthorization { (status) -> Void in
             self.photoStatus = status
             
             if let handler = handler {
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     handler(self.photoStatus)
                 })
             }
@@ -103,15 +103,15 @@ class ImageManager:NSObject, UIImagePickerControllerDelegate, UINavigationContro
     }
     
     func hasCamera() -> Bool {
-        return UIImagePickerController.isCameraDeviceAvailable(UIImagePickerControllerCameraDevice.Rear)
+        return UIImagePickerController.isCameraDeviceAvailable(UIImagePickerControllerCameraDevice.rear)
     }
     
-    func getImage(viewController:UIViewController, type:UIImagePickerControllerSourceType?=nil, callback:(image: UIImage?) -> Void) -> Bool {
+    func getImage(_ viewController:UIViewController, type:UIImagePickerControllerSourceType?=nil, callback:@escaping (_ image: UIImage?) -> Void) -> Bool {
         
         self.callback = callback
         
         if let type = type {
-            if type == .Camera {
+            if type == .camera {
                 if (hasCamera()) {
                     showCamera(viewController)
                     return true
@@ -124,26 +124,26 @@ class ImageManager:NSObject, UIImagePickerControllerDelegate, UINavigationContro
             }
         }
         
-        let hasCameraOption = hasCamera() && (self.videoStatus == .Authorized || self.videoStatus == .NotDetermined)
-        let hasPhotoOption = self.photoStatus == .Authorized || self.photoStatus == .NotDetermined
+        let hasCameraOption = hasCamera() && (self.videoStatus == .authorized || self.videoStatus == .notDetermined)
+        let hasPhotoOption = self.photoStatus == .authorized || self.photoStatus == .notDetermined
         
         if (hasCameraOption && hasPhotoOption) {
-            let optionMenu = UIAlertController(title: nil, message: "Choose Image Source", preferredStyle: .ActionSheet)
+            let optionMenu = UIAlertController(title: nil, message: "Choose Image Source", preferredStyle: .actionSheet)
             
-            let cameraAction = UIAlertAction(title: "Device Camera", style: .Default, handler: {
+            let cameraAction = UIAlertAction(title: "Device Camera", style: .default, handler: {
                 (alert: UIAlertAction!) -> Void in
                 self.showCamera(viewController)
             })
-            let libraryAction = UIAlertAction(title: "Photo Library", style: .Default, handler: {
+            let libraryAction = UIAlertAction(title: "Photo Library", style: .default, handler: {
                 (alert: UIAlertAction!) -> Void in
-                self.showPhotoLibrary(viewController, type:.PhotoLibrary)
+                self.showPhotoLibrary(viewController, type:.photoLibrary)
             })
             
             //
-            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
                 (alert: UIAlertAction!) -> Void in
                 print("Cancelled")
-                callback(image: nil)
+                callback(nil)
                 self.callback = nil
             })
             
@@ -158,16 +158,16 @@ class ImageManager:NSObject, UIImagePickerControllerDelegate, UINavigationContro
             self.showCamera(viewController)
             return true
         } else if (hasPhotoOption) {
-            self.showPhotoLibrary(viewController, type:.PhotoLibrary)
+            self.showPhotoLibrary(viewController, type:.photoLibrary)
             return true
         }
         
         return false
     }
     
-    func showCamera(viewController:UIViewController, hasPermission:Bool = false) {
+    func showCamera(_ viewController:UIViewController, hasPermission:Bool = false) {
         
-        if (!hasPermission && self.videoStatus == .NotDetermined) {
+        if (!hasPermission && self.videoStatus == .notDetermined) {
             self.proceedWithCameraAccess(viewController, handler: {
                 self.showCamera(viewController, hasPermission:true)
             })
@@ -175,14 +175,14 @@ class ImageManager:NSObject, UIImagePickerControllerDelegate, UINavigationContro
             let picker = UIImagePickerController()
             picker.delegate = self
             picker.allowsEditing = false
-            picker.sourceType = .Camera
-            viewController.presentViewController(picker, animated: true, completion: nil)
+            picker.sourceType = .camera
+            viewController.present(picker, animated: true, completion: nil)
         }
     }
     
-    func showPhotoLibrary(viewController:UIViewController, type:UIImagePickerControllerSourceType, hasPermission:Bool = false) {
+    func showPhotoLibrary(_ viewController:UIViewController, type:UIImagePickerControllerSourceType, hasPermission:Bool = false) {
         
-        if (!hasPermission && self.photoStatus == .NotDetermined) {
+        if (!hasPermission && self.photoStatus == .notDetermined) {
             self.proceedWithPhotoAccess(viewController, handler: {
                 self.showPhotoLibrary(viewController, type: type, hasPermission: true)
             })
@@ -191,47 +191,47 @@ class ImageManager:NSObject, UIImagePickerControllerDelegate, UINavigationContro
             picker.delegate = self
             picker.allowsEditing = false
             picker.sourceType = type
-            viewController.presentViewController(picker, animated: true, completion: nil)
+            viewController.present(picker, animated: true, completion: nil)
         }
     }
     
-    func noCameraAccessAlert(controller: UIViewController, showSettings:Bool) {
+    func noCameraAccessAlert(_ controller: UIViewController, showSettings:Bool) {
         
-        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+        DispatchQueue.main.async { () -> Void in
             let title = NSLocalizedString("no camera alert title", comment:"")
             let message = NSLocalizedString("no camera alert text", comment:"")
             
             
-            let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:""), style: .Cancel, handler: nil))
+            let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:""), style: .cancel, handler: nil))
             
             if (showSettings) {
-                alert.addAction(UIAlertAction(title: NSLocalizedString("Go to Settings", comment:""), style: .Default, handler: { action in
-                    UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Go to Settings", comment:""), style: .default, handler: { action in
+                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
                 }))
             }
             
-            controller.presentViewController(alert, animated: true, completion: nil)
+            controller.present(alert, animated: true, completion: nil)
         }
     }
     
-    func noPhotosAccessAlert(controller: UIViewController, showSettings:Bool) {
+    func noPhotosAccessAlert(_ controller: UIViewController, showSettings:Bool) {
         
-        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+        DispatchQueue.main.async { () -> Void in
             let title = NSLocalizedString("no photos alert title", comment:"")
             let message = NSLocalizedString("no photos alert text", comment:"")
             
             
-            let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:""), style: .Cancel, handler: nil))
+            let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:""), style: .cancel, handler: nil))
             
             if (showSettings) {
-                alert.addAction(UIAlertAction(title: NSLocalizedString("Go to Settings", comment:""), style: .Default, handler: { action in
-                    UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Go to Settings", comment:""), style: .default, handler: { action in
+                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
                 }))
             }
             
-            controller.presentViewController(alert, animated: true, completion: nil)
+            controller.present(alert, animated: true, completion: nil)
         }
     }
 }

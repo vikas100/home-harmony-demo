@@ -11,28 +11,28 @@ import Foundation
 class Project: NSObject, NSCoding {
     var projectID: String;
     var name: String;
-    var createDate: NSDate;
-    var modifiedDate: NSDate;
+    var createDate: Date;
+    var modifiedDate: Date;
     
     init(projectID:String, name:String) {
         self.projectID = projectID
         self.name = name
-        self.createDate = NSDate()
-        self.modifiedDate = NSDate()
+        self.createDate = Date()
+        self.modifiedDate = Date()
     }
     
     required init(coder aDecoder: NSCoder) {
-        projectID = aDecoder.decodeObjectForKey("projectID") as! String
-        name = aDecoder.decodeObjectForKey("name") as! String
-        createDate = aDecoder.decodeObjectForKey("createDate") as! NSDate
-        modifiedDate = aDecoder.decodeObjectForKey("modifiedDate") as! NSDate
+        projectID = aDecoder.decodeObject(forKey: "projectID") as! String
+        name = aDecoder.decodeObject(forKey: "name") as! String
+        createDate = aDecoder.decodeObject(forKey: "createDate") as! Date
+        modifiedDate = aDecoder.decodeObject(forKey: "modifiedDate") as! Date
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(projectID, forKey: "projectID")
-        aCoder.encodeObject(name, forKey: "name")
-        aCoder.encodeObject(createDate, forKey: "createDate")
-        aCoder.encodeObject(modifiedDate, forKey: "modifiedDate")
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(projectID, forKey: "projectID")
+        aCoder.encode(name, forKey: "name")
+        aCoder.encode(createDate, forKey: "createDate")
+        aCoder.encode(modifiedDate, forKey: "modifiedDate")
     }
     
     var path: String {
@@ -46,17 +46,17 @@ class Project: NSObject, NSCoding {
 
 class ProjectDatabase: NSMutableDictionary {
     
-    private var database: NSMutableDictionary!
+    fileprivate var database: NSMutableDictionary!
     
     static var singleton : ProjectDatabase!
     
     internal class func sharedDatabase() -> ProjectDatabase {
         if (singleton == nil) {
             singleton = ProjectDatabase()
-            let prefs = NSUserDefaults.standardUserDefaults();
+            let prefs = UserDefaults.standard;
             
-            if let db = prefs.objectForKey("projects") as? NSData {
-                if let unarchived = NSKeyedUnarchiver.unarchiveObjectWithData(db) as? NSDictionary {
+            if let db = prefs.object(forKey: "projects") as? Data {
+                if let unarchived = NSKeyedUnarchiver.unarchiveObject(with: db) as? NSDictionary {
                     singleton.database = unarchived.mutableCopy() as? NSMutableDictionary
                 }
             } else {
@@ -67,15 +67,15 @@ class ProjectDatabase: NSMutableDictionary {
     }
     
     func save() {
-        let prefs = NSUserDefaults.standardUserDefaults();
+        let prefs = UserDefaults.standard;
         
-        let archivedObject = NSKeyedArchiver.archivedDataWithRootObject(database)
-        prefs.setObject(archivedObject, forKey: "projects")
+        let archivedObject = NSKeyedArchiver.archivedData(withRootObject: database)
+        prefs.set(archivedObject, forKey: "projects")
         
-        NSUserDefaults.standardUserDefaults().synchronize()
+        UserDefaults.standard.synchronize()
     }
     
-    func cloneProject(projectID: String, newName:String) -> String {
+    func cloneProject(_ projectID: String, newName:String) -> String {
 
         let newProjectID = CBImagePainter.cloneProject(ProjectDatabase.getProjectPath(), projectID: projectID)
         
@@ -83,50 +83,50 @@ class ProjectDatabase: NSMutableDictionary {
         let path = ProjectDatabase.getProjectPath(projectID)
         var metaData = CBImage.getUserData(path)
 
-        metaData["name"] = newName;
-        metaData["create_date"] = NSDate();
-        metaData["modified_date"] = NSDate();
+        metaData?["name"] = newName;
+        metaData?["create_date"] = Date();
+        metaData?["modified_date"] = Date();
         
         CBImage.setUserData(metaData, path: path)
         
-        database[newProjectID] = Project(projectID: newProjectID, name:newName)
+        database[newProjectID] = Project(projectID: newProjectID!, name:newName)
         save()
         
-        return newProjectID
+        return newProjectID!
     }
     
-    func saveProject(painter: CBImagePainter, name:String) {
+    func saveProject(_ painter: CBImagePainter, name:String) {
         painter.stillImage.userData["name"] = name
         
-        if (nil == painter.stillImage.userData.objectForKey("create_date")) {
-            painter.stillImage.userData["create_date"] = NSDate();
+        if (nil == painter.stillImage.userData.object(forKey: "create_date")) {
+            painter.stillImage.userData["create_date"] = Date();
         }
         
-        painter.stillImage.userData["modified_date"] = NSDate();
+        painter.stillImage.userData["modified_date"] = Date();
         
-        let projectID = painter.saveProjectToDirectory(ProjectDatabase.getProjectPath(), saveState: false)
+        let projectID = painter.saveProject(toDirectory: ProjectDatabase.getProjectPath(), saveState: false)
         
         if let existingProject = database[projectID] as? Project {
             existingProject.name = name
-            existingProject.modifiedDate = NSDate()
+            existingProject.modifiedDate = Date()
         } else {
-            database[projectID] = Project(projectID:projectID, name:name)
+            database[projectID] = Project(projectID:projectID!, name:name)
         }
         save()
     }
     
-    func removeProject(projectID: String) {
-        removeObjectForKey(projectID)
+    func removeProject(_ projectID: String) {
+        removeObject(forKey: projectID)
         
         CBImage.removeProjectDirectory(ProjectDatabase.getProjectPath(projectID))
         save()
     }
     
-    override func removeObjectForKey(aKey: AnyObject) {
-        database.removeObjectForKey(aKey)
+    override func removeObject(forKey aKey: Any) {
+        database.removeObject(forKey: aKey)
     }
     
-    override func setObject(anObject: AnyObject, forKey aKey: NSCopying) {
+    override func setObject(_ anObject: Any, forKey aKey: NSCopying) {
         database.setObject(anObject, forKey: aKey)
     }
     
@@ -136,8 +136,8 @@ class ProjectDatabase: NSMutableDictionary {
         }
     }
     
-    override func objectForKey(aKey: AnyObject) -> AnyObject? {
-        return database.objectForKey(aKey)
+    override func object(forKey aKey: Any) -> Any? {
+        return database.object(forKey: aKey)
     }
     
     override func keyEnumerator() -> NSEnumerator {
@@ -145,19 +145,19 @@ class ProjectDatabase: NSMutableDictionary {
     }
     
     var sortedKeys: [AnyObject] {
-        let sortedKeys = database.allKeys.sort { (objectA, objectB) -> Bool in
+        let sortedKeys = database.allKeys.sorted { (objectA, objectB) -> Bool in
             if let projectA = database[(objectA as? String)!] as? Project {
                 if let projectB = database[(objectB as? String)!] as? Project {
-                    return projectA.modifiedDate.compare(projectB.modifiedDate) == NSComparisonResult.OrderedDescending
+                    return projectA.modifiedDate.compare(projectB.modifiedDate) == ComparisonResult.orderedDescending
                 }
             }
             return false;
         }
-        return sortedKeys
+        return sortedKeys as [AnyObject]
     }
     
-    internal class func getProjectPath(projectID:String?=nil) -> String {
-        let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+    internal class func getProjectPath(_ projectID:String?=nil) -> String {
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         
         if (projectID == nil) {
             return documentsPath + "/projects"
@@ -166,8 +166,8 @@ class ProjectDatabase: NSMutableDictionary {
         }
     }
     
-    func getProjectMetaData(projectID:String!) -> NSDictionary! {
+    func getProjectMetaData(_ projectID:String!) -> NSDictionary! {
         let path = ProjectDatabase.getProjectPath(projectID)
-        return CBImage.getUserData(path)
+        return CBImage.getUserData(path) as NSDictionary!
     }
 }

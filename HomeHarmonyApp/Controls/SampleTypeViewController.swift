@@ -9,7 +9,7 @@
 import UIKit
 
 internal protocol SampleCellDelegate : NSObjectProtocol {
-    func sampleSelected(samplePath:String)
+    func sampleSelected(_ samplePath:String)
 }
 
 class SampleTypeViewController: UICollectionViewController {
@@ -20,30 +20,30 @@ class SampleTypeViewController: UICollectionViewController {
     
     weak internal var delegate: SampleCellDelegate?
     
-    private var roomExampleNames : NSMutableArray = []
-    private var roomExampleForType : NSMutableArray = []
+    fileprivate var roomExampleNames : NSMutableArray = []
+    fileprivate var roomExampleForType : NSMutableArray = []
     
     let countPerType = 3
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.collectionView!.backgroundColor = UIColor.clearColor()
+        self.collectionView!.backgroundColor = UIColor.clear
         self.collectionView!.backgroundView = nil
         
         let roomsPath = getSampleBasePath()
         
         do {
-            let rawRoomTypes = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(roomsPath)
+            let rawRoomTypes = try FileManager.default.contentsOfDirectory(atPath: roomsPath!)
             
             for roomType in rawRoomTypes {
                 let basePath = "\(roomsPath!)/\(roomType)"
-                let projects = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(basePath)
+                let projects = try FileManager.default.contentsOfDirectory(atPath: basePath)
                 if projects.count >= countPerType {
                     for index in 0 ..< countPerType {
                         let singularRoomType = String(roomType.characters.dropLast())
-                        roomExampleNames.addObject(NSLocalizedString(singularRoomType, comment:""))
-                        roomExampleForType.addObject("\(basePath)/\(projects[index])")
+                        roomExampleNames.add(NSLocalizedString(singularRoomType, comment:""))
+                        roomExampleForType.add("\(basePath)/\(projects[index])")
                     }
                 }
             }
@@ -60,34 +60,34 @@ class SampleTypeViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDataSource
 
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
         return roomExampleForType.count
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath)
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
     
         let imageView = cell.viewWithTag(1) as? UIImageView
         // Configure the cell
         
-        let roomExamplePath = roomExampleForType[indexPath.row] as! String
+        let roomExamplePath = roomExampleForType[(indexPath as NSIndexPath).row] as! String
         
         imageView!.image = CBImage.getPreview(roomExamplePath)
         
         let imageLabel = cell.viewWithTag(2) as? UILabel
-        imageLabel!.text = roomExampleNames[indexPath.row] as? String
+        imageLabel!.text = roomExampleNames[(indexPath as NSIndexPath).row] as? String
         
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         
         let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout
         let horizSpacing = flowLayout?.sectionInset.left
@@ -97,8 +97,8 @@ class SampleTypeViewController: UICollectionViewController {
         return CGSize(width: size, height: size)
     }
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let roomExamplePath = roomExampleForType[indexPath.row] as! String
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let roomExamplePath = roomExampleForType[(indexPath as NSIndexPath).row] as! String
         
         self.delegate?.sampleSelected(roomExamplePath)
     }

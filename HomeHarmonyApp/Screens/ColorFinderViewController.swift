@@ -33,19 +33,19 @@ class ColorFinderViewController: UIViewController {
         
         //set up camera and library
         
-        self.currentColorView.hidden = true
-        self.colorNameLabel.hidden = true
-        self.colorCodeLabel.hidden = true
-        self.favoritesButton.hidden = true
-        self.visualizerButton.hidden = true
+        self.currentColorView.isHidden = true
+        self.colorNameLabel.isHidden = true
+        self.colorCodeLabel.isHidden = true
+        self.favoritesButton.isHidden = true
+        self.visualizerButton.isHidden = true
         
-        self.reshootButton.hidden = !ImageManager.sharedInstance.hasCamera()
+        self.reshootButton.isHidden = !ImageManager.sharedInstance.hasCamera()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         
-        self.navigationController?.navigationBar.hidden = false
+        self.navigationController?.navigationBar.isHidden = false
         
         //load an image if none yet
         if let _ = image {
@@ -55,27 +55,27 @@ class ColorFinderViewController: UIViewController {
         
         colorFinder.colorTouchedAtPoint = ({
             [weak self]
-            (touchType: TouchStep, point:CGPoint, color:UIColor!) in
+            (touchType: TouchStep, point:CGPoint, color:UIColor?) in
             
             if let strongSelf = self {
 //                let pointInView = CGPoint(x:point.x + (self?.colorFinder.frame.origin.x)!,
 //                    y:point.y + (self?.colorFinder.frame.origin.y)!)
                 
-                CBThreading.performBlock({ () -> Void in
-                    if let dataColor = Color.closestMatchForUIColor(color, brand: nil, category: nil, excludingColors: nil) {
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                CBThreading.perform({ () -> Void in
+                    if let dataColor = Color.closestMatch(for: color, brand: nil, category: nil, excludingColors: nil) {
+                        DispatchQueue.main.async(execute: { () -> Void in
                             strongSelf.colorChosen(strongSelf, color: dataColor)
                         })
                     }
-                    }, onQueue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), withIdentifier: "ColorFinder",
+                    }, on: DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default), withIdentifier: "ColorFinder",
                        interval:1.0)
                 
                 if (touchType == TouchStepEnded) {
-                    strongSelf.reshootButton.hidden = !ImageManager.sharedInstance.hasCamera()
-                    strongSelf.currentColorView.hidden = false
+                    strongSelf.reshootButton.isHidden = !ImageManager.sharedInstance.hasCamera()
+                    strongSelf.currentColorView.isHidden = false
                 } else {
-                    strongSelf.libraryButton.hidden = true
-                    strongSelf.reshootButton.hidden = true
+                    strongSelf.libraryButton.isHidden = true
+                    strongSelf.reshootButton.isHidden = true
                     strongSelf.currentColorView.backgroundColor = color
                     strongSelf.currentColorViewX.constant = point.x - strongSelf.currentColorView.frame.size.width / 2.0
                     strongSelf.currentColorViewY.constant = point.y - strongSelf.currentColorView.frame.size.height / 2.0
@@ -84,27 +84,27 @@ class ColorFinderViewController: UIViewController {
             })
     }
     
-    func colorChosen(sender: AnyObject, color:Color) {
+    func colorChosen(_ sender: AnyObject, color:Color) {
         self.selectedColor = color
         
-        self.colorNameLabel.hidden = false
-        self.colorCodeLabel.hidden = false
-        self.favoritesButton.hidden = false
-        self.visualizerButton.hidden = false
+        self.colorNameLabel.isHidden = false
+        self.colorCodeLabel.isHidden = false
+        self.favoritesButton.isHidden = false
+        self.visualizerButton.isHidden = false
         
         self.primaryColorView.backgroundColor = color.uiColor
         self.colorNameLabel.text = "\(color.category.brand.name) - \(color.name)"
         self.colorCodeLabel.text = "#\(color.code)"
-        self.favoritesButton.selected = FavoritesDatabase.sharedDatabase().isFavorite(color)
+        self.favoritesButton.isSelected = FavoritesDatabase.sharedDatabase().isFavorite(color)
         
-        self.favoritesButton.tintColor = isLightColor(color.uiColor) ? UIColor.blackColor() : UIColor.whiteColor()
+        self.favoritesButton.tintColor = isLightColor(color.uiColor) ? UIColor.black : UIColor.white
         self.colorCodeLabel.textColor = self.favoritesButton.tintColor
     }
     
     //iPhone camera and library delegate methods
     
     //load an image into painter
-    private func loadImage(image: UIImage!) {
+    fileprivate func loadImage(_ image: UIImage!) {
         colorFinder.image = image
         
 //        if let uicolors = colorFinder.getMostCommonColors(10, type: CBColorTypeAll) as? [UIColor] {
@@ -119,13 +119,13 @@ class ColorFinderViewController: UIViewController {
         //self.swatchesCollection.category
     }
     
-    private func findClosestMatches(uicolors: [UIColor]) -> [Color] {
+    fileprivate func findClosestMatches(_ uicolors: [UIColor]) -> [Color] {
         
         let matches = NSMutableArray()
         uicolors.forEach({ (uicolor) -> () in
             //find closest match
-            let match = Color.closestMatchForUIColor(uicolor, brand: nil, category: nil, excludingColors: matches as [AnyObject]);
-            matches.addObject(match)
+            let match = Color.closestMatch(for: uicolor, brand: nil, category: nil, excludingColors: matches as [AnyObject]);
+            matches.add(match)
         })
         
         var colors: [Color] = []
@@ -139,23 +139,23 @@ class ColorFinderViewController: UIViewController {
         return colors
     }
     
-    @IBAction func reshootPressed(sender: AnyObject) {
-        ImageManager.sharedInstance.getImage(self, type:.Camera, callback: { (image: UIImage?) -> Void in
+    @IBAction func reshootPressed(_ sender: AnyObject) {
+        ImageManager.sharedInstance.getImage(self, type:.camera, callback: { (image: UIImage?) -> Void in
             if let image = image {
                 self.loadImage(image)
             }
         })
     }
    
-    @IBAction func libraryButtonPressed(sender: AnyObject) {
-        ImageManager.sharedInstance.getImage(self, type:.PhotoLibrary, callback: { (image: UIImage?) -> Void in
+    @IBAction func libraryButtonPressed(_ sender: AnyObject) {
+        ImageManager.sharedInstance.getImage(self, type:.photoLibrary, callback: { (image: UIImage?) -> Void in
             if let image = image {
                 self.loadImage(image)
             }
         })
     }
     
-    @IBAction func favoritesPressed(sender: AnyObject) {
+    @IBAction func favoritesPressed(_ sender: AnyObject) {
         if let color = selectedColor {
             let isFavorite = FavoritesDatabase.sharedDatabase().isFavorite(color)
             if isFavorite {
@@ -163,20 +163,20 @@ class ColorFinderViewController: UIViewController {
             } else {
                 FavoritesDatabase.sharedDatabase().addFavorite(color)
             }
-            self.favoritesButton.selected = FavoritesDatabase.sharedDatabase().isFavorite(color)
+            self.favoritesButton.isSelected = FavoritesDatabase.sharedDatabase().isFavorite(color)
         }
     }
     
-    @IBAction func visualizerPressed(sender: AnyObject) {
+    @IBAction func visualizerPressed(_ sender: AnyObject) {
         ImageManager.sharedInstance.proceedWithCameraAccess(self) {
-            self.performSegueWithIdentifier("showPainter", sender: self)
+            self.performSegue(withIdentifier: "showPainter", sender: self)
         }
     }
     
     // MARK: - Navigation
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let vc = segue.destinationViewController as? AugmentedViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? AugmentedViewController {
             vc.selectedColor = selectedColor
         }
     }

@@ -9,7 +9,7 @@
 import UIKit
 
 internal protocol SidebarDelegate : ColorCategorySelectionDelegate {
-    func colorChosen(sender: AnyObject, color:Color)
+    func colorChosen(_ sender: AnyObject, color:Color)
 }
 
 private let brandHeaderIdentifier = "BrandHeader"
@@ -36,47 +36,47 @@ class SidebarTableViewController: UIViewController, UITableViewDataSource, UITab
     
     var searchResults : NSArray!
     
-    private var searchController : UISearchController!;
+    fileprivate var searchController : UISearchController!;
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        allBrands = Brand.allBrands()
+        allBrands = Brand.allBrands() as NSArray!
 
-        self.tableView.registerClass(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: brandHeaderIdentifier)
+        self.tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: brandHeaderIdentifier)
     }
 
     // MARK: - Table view data source
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         if (!self.isSearching) {
             return allBrands.count
         }
         return 1 //self.searchResults.count
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (!self.isSearching) {
-            return allBrands[section].categories!.count
+            return (allBrands[section] as AnyObject).categories!.count
         } else {
             return self.searchResults.count
         }
     }
     
-    func categoryForIndexPath(indexPath: NSIndexPath) -> ColorCategory! {
-        let brand = allBrands[indexPath.section] as? Brand
+    func categoryForIndexPath(_ indexPath: IndexPath) -> ColorCategory! {
+        let brand = allBrands[(indexPath as NSIndexPath).section] as? Brand
         let categories = (brand?.categories)! as NSSet //.allObjects[indexPath.section] as? ColorCategory
         
-        let category = categories.allObjects[indexPath.row] as? ColorCategory
+        let category = categories.allObjects[(indexPath as NSIndexPath).row] as? ColorCategory
         
         return category
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         //tableView.dequeueReusableCellWithIdentifier(brandCellIdentifier, forIndexPath: indexPath)
         if (!self.isSearching) {
-            guard let cell = tableView.dequeueReusableCellWithIdentifier(brandCellIdentifier) as? BrandTableViewCell else { fatalError("Expected to display a BrandTableViewCell") }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: brandCellIdentifier) as? BrandTableViewCell else { fatalError("Expected to display a BrandTableViewCell") }
             
             let category = categoryForIndexPath(indexPath)
             
@@ -85,9 +85,9 @@ class SidebarTableViewController: UIViewController, UITableViewDataSource, UITab
             
             return cell
         } else {
-            guard let cell = tableView.dequeueReusableCellWithIdentifier(searchCellIdentifier) as? SearchResult else { fatalError("Expected to display a SearchCell") }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: searchCellIdentifier) as? SearchResult else { fatalError("Expected to display a SearchCell") }
             
-            let searchResult = self.searchResults.objectAtIndex(indexPath.row) as? Color
+            let searchResult = self.searchResults.object(at: (indexPath as NSIndexPath).row) as? Color
         
             cell.colorNameLabel.text = searchResult?.name
             cell.colorView.backgroundColor = searchResult?.uiColor
@@ -96,10 +96,10 @@ class SidebarTableViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?
     {
         if (!self.isSearching) {
-            let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(brandHeaderIdentifier)! as UITableViewHeaderFooterView
+            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: brandHeaderIdentifier)! as UITableViewHeaderFooterView
             
             let brand = allBrands[section] as? Brand
             headerView.textLabel!.text = brand?.name
@@ -110,7 +110,7 @@ class SidebarTableViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (!self.isSearching) {
             if let category = categoryForIndexPath(indexPath) as ColorCategory! {
                 self.delegate?.categorySelected(self, category: category)
@@ -118,11 +118,11 @@ class SidebarTableViewController: UIViewController, UITableViewDataSource, UITab
         } else {
             //color selected
             self.searchBar.resignFirstResponder()
-            let searchResult = self.searchResults.objectAtIndex(indexPath.row) as? Color
+            let searchResult = self.searchResults.object(at: (indexPath as NSIndexPath).row) as? Color
             self.delegate?.colorChosen(self, color: searchResult!)
 
-            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1.5 * Double(NSEC_PER_SEC)))
-            dispatch_after(delayTime, dispatch_get_main_queue()) {
+            let delayTime = DispatchTime.now() + Double(Int64(1.5 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+            DispatchQueue.main.asyncAfter(deadline: delayTime) {
                 self.isSearching = false
             }
         }
@@ -134,7 +134,7 @@ class SidebarTableViewController: UIViewController, UITableViewDataSource, UITab
             if (!self.isSearching) {
                 self.searchBar.text = nil
                 self.searchBar.resignFirstResponder()
-                self.tableView.userInteractionEnabled = true
+                self.tableView.isUserInteractionEnabled = true
                 tableView.reloadData()
             } else {
                 reloadSearchData()
@@ -142,21 +142,21 @@ class SidebarTableViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         self.isSearching = true
     }
 
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String)
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String)
     {
         self.reloadSearchData()
     }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.isSearching = false
     }
     
     func reloadSearchData() {
-        self.tableView.userInteractionEnabled = false
+        self.tableView.isUserInteractionEnabled = false
         
         if (self.searchBar.text!.characters.count < 3) {
             self.searchResults = []
@@ -164,25 +164,26 @@ class SidebarTableViewController: UIViewController, UITableViewDataSource, UITab
             return
         }
         //get results
-        let numbers = NSCharacterSet(charactersInString: "0123456789")
-        let numberScanner = NSScanner(string: self.searchBar.text!)
+        let numbers = CharacterSet(charactersIn: "0123456789")
+        let numberScanner = Scanner(string: self.searchBar.text!)
         // Throw away characters before the first number.
-        numberScanner.scanUpToCharactersFromSet(numbers, intoString:nil)
+        numberScanner.scanUpToCharacters(from: numbers, into:nil)
         
         // Collect numbers.
         var numberString: NSString? = ""
-        numberScanner.scanCharactersFromSet(numbers, intoString: &numberString)
+        numberScanner.scanCharacters(from: numbers, into: &numberString)
         
-        CBThreading.performBlock({ () -> Void in
+        CBThreading.perform({ () -> Void in
             let query = numberString!.length > 0 ? "(code CONTAINS[cd] %@)" : "(name CONTAINS[cd] %@)"
             let predicate = NSPredicate(format: query, self.searchBar.text!)
-            self.searchResults = CBCoreData.sharedInstance().getRecordsForClass(Color.classForCoder(), predicate: predicate, sortedBy: nil, context: nil)
+            //self.searchResults = (CBCoreData.sharedInstance() as AnyObject).getRecordsFor(Color.classForCoder(), predicate: predicate, sortedBy: nil, context: nil)
+            //TODO: broken
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 self.tableView.reloadData()
-                self.tableView.userInteractionEnabled = true
+                self.tableView.isUserInteractionEnabled = true
             })
-        }, onQueue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), withIdentifier: "SearchColors")
+        }, on: DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default), withIdentifier: "SearchColors")
     }
 
 }

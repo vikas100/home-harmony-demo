@@ -19,27 +19,27 @@ class SwatchContainerCell: UICollectionViewCell {
         }
     }
     
-    override var selected: Bool {
+    override var isSelected: Bool {
         didSet {
             self.setNeedsDisplay()
         }
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         
-        CGContextClearRect(context, rect)
+        context?.clear(rect)
         
         if (color != nil) {
-            CGContextSetFillColorWithColor(context, color.uiColor.CGColor)
-            CGContextFillRect(context, rect)
+            context?.setFillColor(color.uiColor.cgColor)
+            context?.fill(rect)
         }
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.backgroundColor = UIColor.clearColor()
-        self.opaque = false
+        self.backgroundColor = UIColor.clear
+        self.isOpaque = false
     }
 }

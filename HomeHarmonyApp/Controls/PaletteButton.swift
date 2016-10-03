@@ -18,7 +18,7 @@ class PaletteButton: UIButton {
     
     var storedColor:UIColor = CAMBRIAN_COLOR
     
-    private func initialize() {
+    fileprivate func initialize() {
         self.clipsToBounds = true
     }
     
@@ -41,8 +41,8 @@ class PaletteButton: UIButton {
                 if (alpha == 1.0) {
                     storedColor = bgColor
                     if (isGhost) {
-                        self.opaque = false
-                        self.backgroundColor = UIColor.clearColor()
+                        self.isOpaque = false
+                        self.backgroundColor = UIColor.clear
                     }
                 }
             }
@@ -53,8 +53,8 @@ class PaletteButton: UIButton {
     @IBInspectable var isGhost:Bool = false {
         didSet {
             if (isGhost) {
-                self.opaque = false
-                self.backgroundColor = UIColor.clearColor()
+                self.isOpaque = false
+                self.backgroundColor = UIColor.clear
             } else {
                 self.backgroundColor = storedColor
             }
@@ -77,57 +77,58 @@ class PaletteButton: UIButton {
         }
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         
-        self.opaque = false
+        self.isOpaque = false
         
         drawShadows(self.bounds)
         
         if (self.isGhost) {
-            self.setImage(nil, forState: UIControlState.Normal)
-            self.setTitle("New", forState: UIControlState.Normal)
-            self.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+            self.setImage(nil, for: UIControlState())
+            self.setTitle("New", for: UIControlState())
+            self.setTitleColor(UIColor.black, for: UIControlState())
             
-            super.drawRect(rect)
+            super.draw(rect)
             
             let context = UIGraphicsGetCurrentContext()
-            CGContextSetStrokeColorWithColor(context, self.storedColor.CGColor)
-            CGContextSetLineWidth(context, 3.0);
-            let dashPattern:[CGFloat] = [6.0, 6.0];
-            CGContextSetLineDash(context, 0.0, dashPattern, 2);
+            context?.setStrokeColor(self.storedColor.cgColor)
+            context?.setLineWidth(3.0);
+            let dashPattern:[CGFloat] = [6.0, 6.0]
+
+            context?.setLineDash(phase: 0.0, lengths: dashPattern)
             
             let strokeRect = CGRect(x:4,y:4,width:rect.width-8,height:rect.height-8)
-            CGContextStrokeRect(context, strokeRect)
+            context?.stroke(strokeRect)
             
             innerShadowLayer.shadowOpacity = 0.0
         } else {
-            self.setTitle(nil, forState: UIControlState.Normal)
-            self.tintColor = isLightColor(self.storedColor) ? UIColor.blackColor() : UIColor.whiteColor()
+            self.setTitle(nil, for: UIControlState())
+            self.tintColor = isLightColor(self.storedColor) ? UIColor.black : UIColor.white
             
             if (self.isCurrentLayer) {
                 if (self.isEditing) {
-                    self.setImage(downImage, forState: UIControlState.Normal)
+                    self.setImage(downImage, for: UIControlState())
                 } else {
-                    self.setImage(upImage, forState: UIControlState.Normal)
+                    self.setImage(upImage, for: UIControlState())
                 }
                 innerShadowLayer.shadowOpacity = 0.0
             } else {
-                self.setImage(nil, forState: UIControlState.Normal)
+                self.setImage(nil, for: UIControlState())
                 innerShadowLayer.shadowOpacity = 0.5
             }
-            super.drawRect(rect)
+            super.draw(rect)
             
             let context = UIGraphicsGetCurrentContext()
-            CGContextSetFillColorWithColor(context, self.storedColor.CGColor)
-            CGContextFillRect(context, rect)
+            context?.setFillColor(self.storedColor.cgColor)
+            context?.fill(rect)
         }
     }
     
-    func drawShadows(rect: CGRect) {
+    func drawShadows(_ rect: CGRect) {
 
         innerShadowLayer.frame = rect
         
-        innerShadowLayer.shadowColor = UIColor.blackColor().CGColor
+        innerShadowLayer.shadowColor = UIColor.black.cgColor
         innerShadowLayer.shadowOffset = CGSize(width: 0, height: 3.0)
         
         // Standard shadow stuff
@@ -138,8 +139,9 @@ class PaletteButton: UIButton {
         innerShadowLayer.fillRule = kCAFillRuleEvenOdd
         
         // Create the larger rectangle path.
-        let path = CGPathCreateMutable();
-        CGPathAddRect(path, nil, CGRectInset(bounds, -42, -42));
+        let path = CGMutablePath();
+        
+        path.addRect(bounds.insetBy(dx: -42, dy: -42))
         
         // Add the inner path so it's subtracted from the outer path.
         // someInnerPath could be a simple bounds rect, or maybe
@@ -163,9 +165,10 @@ class PaletteButton: UIButton {
             innerRect = CGRect(x:-10,y:0, width: innerShadowLayer.bounds.size.width + 20, height: innerShadowLayer.bounds.size.height)
         }
 
-        let someInnerPath = UIBezierPath(rect: innerRect).CGPath
-        CGPathAddPath(path, nil, someInnerPath);
-        CGPathCloseSubpath(path);
+        let someInnerPath = UIBezierPath(rect: innerRect).cgPath
+        
+        path.addPath(someInnerPath)
+        path.closeSubpath();
         
         //let maskLayer = CALayer()
         //innerShadowLayer.mask = maskLayer

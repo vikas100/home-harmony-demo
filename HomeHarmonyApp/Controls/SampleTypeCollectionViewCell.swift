@@ -17,16 +17,16 @@ class SampleTypeCollectionViewCell: UICollectionViewCell, UICollectionViewDelega
     
     weak internal var delegate: SampleCellDelegate?
     
-    private var roomType : String!
-    private var projectPaths = [String]()
+    fileprivate var roomType : String!
+    fileprivate var projectPaths = [String]()
     
-    func configureWithRoomType(roomType: String) {
+    func configureWithRoomType(_ roomType: String) {
         self.roomType = roomType
         self.headingLabel.text = roomType
         
         do {
             let roomTypePath = getSampleTypePath(self.roomType)
-            try projectPaths = NSFileManager.defaultManager().contentsOfDirectoryAtPath(roomTypePath)
+            try projectPaths = FileManager.default.contentsOfDirectory(atPath: roomTypePath!)
         }
         catch let error as NSError {
             error.description
@@ -37,21 +37,21 @@ class SampleTypeCollectionViewCell: UICollectionViewCell, UICollectionViewDelega
     
     // MARK: UICollectionViewDataSource
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return projectPaths.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(SampleTypeCollectionViewCell.reuseIdentifier, forIndexPath: indexPath)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SampleTypeCollectionViewCell.reuseIdentifier, for: indexPath)
         
         let imageView = cell.viewWithTag(1) as? UIImageView
         // Configure the cell
         
-        let projectID = projectPaths[indexPath.row]
+        let projectID = projectPaths[(indexPath as NSIndexPath).row]
         let projectPath = getSampleProjectPath(self.roomType, projectID: projectID)
         imageView!.image = CBImage.getPreview(projectPath)
         
@@ -60,7 +60,7 @@ class SampleTypeCollectionViewCell: UICollectionViewCell, UICollectionViewDelega
     
     // MARK: UICollectionViewDelegate
     
-    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         //guard let cell = cell as? SampleTypeCollectionViewCell else { fatalError("Expected to display a DataItemCollectionViewCell") }
         //let projectDirectoryPath = rootDirectoryPath + "/" + projectPaths[indexPath.row]
         
@@ -68,10 +68,10 @@ class SampleTypeCollectionViewCell: UICollectionViewCell, UICollectionViewDelega
         //cellComposer.composeCell(cell, projectPath:projectDirectoryPath, usePreview:true)
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let projectID = projectPaths[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let projectID = projectPaths[(indexPath as NSIndexPath).row]
         let projectPath = getSampleProjectPath(self.roomType, projectID: projectID)
-        self.delegate?.sampleSelected(projectPath)
+        self.delegate?.sampleSelected(projectPath!)
     }
 
 }

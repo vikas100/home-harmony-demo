@@ -11,7 +11,7 @@ import UIKit
 private let reuseIdentifier = "ProjectCell"
 
 internal protocol ProjectCellDelegate : NSObjectProtocol {
-    func projectSelected(samplePath:String)
+    func projectSelected(_ samplePath:String)
 }
 
 class ProjectCollectionViewController: UICollectionViewController {
@@ -19,16 +19,16 @@ class ProjectCollectionViewController: UICollectionViewController {
     weak internal var delegate: ProjectCellDelegate?
     let visibleCount = 3.5
 
-    private var projects: [Project] = []
+    fileprivate var projects: [Project] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.collectionView!.backgroundColor = UIColor.clearColor()
+        self.collectionView!.backgroundColor = UIColor.clear
         self.collectionView!.backgroundView = nil
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         self.projects.removeAll()
         
         if let projectIDs = ProjectDatabase.sharedDatabase().sortedKeys as? [String] {
@@ -49,21 +49,21 @@ class ProjectCollectionViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDataSource
 
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
         return self.projects.count
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath)
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         
-        let project = self.projects[indexPath.row]
+        let project = self.projects[(indexPath as NSIndexPath).row]
         
         if let imageView = cell.viewWithTag(1) as? UIImageView {
             imageView.image = project.previewImage
@@ -76,7 +76,7 @@ class ProjectCollectionViewController: UICollectionViewController {
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         
         let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout
         let horizSpacing = flowLayout?.sectionInset.left
@@ -86,8 +86,8 @@ class ProjectCollectionViewController: UICollectionViewController {
         return CGSize(width: size, height: size)
     }
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let project = self.projects[indexPath.row]
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let project = self.projects[(indexPath as NSIndexPath).row]
         self.delegate?.projectSelected(project.path)
     }
 }

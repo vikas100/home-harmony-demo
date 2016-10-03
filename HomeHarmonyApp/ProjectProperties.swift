@@ -9,21 +9,21 @@
 import Foundation
 
 func getSampleBasePath() -> String! {
-    return NSBundle.mainBundle().pathForResource("Rooms", ofType: nil)
+    return Bundle.main.path(forResource: "Rooms", ofType: nil)
 }
 
-func getSampleTypePath(roomType: String) -> String! {
+func getSampleTypePath(_ roomType: String) -> String! {
     return "\(getSampleBasePath())/\(roomType)"
 }
 
-func getSampleProjectPath(roomType: String, projectID:String) -> String! {
+func getSampleProjectPath(_ roomType: String, projectID:String) -> String! {
     return "\(getSampleTypePath(roomType))/\(projectID)"
 }
 
-func applyPlainShadow(view: UIView, offset:CGSize) {
+func applyPlainShadow(_ view: UIView, offset:CGSize) {
     let layer = view.layer
     
-    layer.shadowColor = UIColor.blackColor().CGColor
+    layer.shadowColor = UIColor.black.cgColor
     layer.shadowOffset = offset
     layer.shadowOpacity = 0.3
     layer.shadowRadius = max(fabs(offset.width), fabs(offset.height)/2.0)
@@ -32,7 +32,7 @@ func applyPlainShadow(view: UIView, offset:CGSize) {
 let INITIAL_COLOR_CATEGORY = "ColorSmart Premium Plus"
 let CAMBRIAN_COLOR = UIColor(red: 22/255.0, green: 167/255.0, blue: 231/255.0, alpha: 1.0)
 
-func isLightColor(color:UIColor) -> Bool {
+func isLightColor(_ color:UIColor) -> Bool {
     var intensity:CGFloat = 0
     var saturation:CGFloat = 0
     color.getHue(nil, saturation: &saturation, brightness: &intensity, alpha: nil)
@@ -40,10 +40,10 @@ func isLightColor(color:UIColor) -> Bool {
     return isLightColor
 }
 
-func presentActionSheet(actionSheet:UIAlertController, viewController:UIViewController) {
+func presentActionSheet(_ actionSheet:UIAlertController, viewController:UIViewController) {
     if let popoverController = actionSheet.popoverPresentationController {
         popoverController.sourceView = viewController.view
         popoverController.sourceRect = CGRect(x: viewController.view.bounds.width/2-25, y: viewController.view.bounds.height/2-25, width: 50, height: 50)
     }
-    viewController.presentViewController(actionSheet, animated: true, completion: nil)
+    viewController.present(actionSheet, animated: true, completion: nil)
 }

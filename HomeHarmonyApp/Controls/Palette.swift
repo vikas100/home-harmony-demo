@@ -9,8 +9,8 @@
 import Foundation
 
 internal protocol PaletteDelegate : NSObjectProtocol {
-    func paletteColorPressed(sender: PaletteButton, index:Int)
-    func paletteFrameUpdated(frame:CGRect)
+    func paletteColorPressed(_ sender: PaletteButton, index:Int)
+    func paletteFrameUpdated(_ frame:CGRect)
 }
 
 @IBDesignable
@@ -20,9 +20,9 @@ class Palette: UIView {
     weak internal var selectedButton: PaletteButton?
     weak internal var painter:CBCombinedPainter?
     
-    private var buttonSize:CGSize!
+    fileprivate var buttonSize:CGSize!
     
-    private func initialize() {
+    fileprivate func initialize() {
         buttonSize = CGSize(width: self.frame.width, height: self.frame.height)
     }
     
@@ -46,10 +46,10 @@ class Palette: UIView {
                 button.backgroundColor = painter.paintColor
             } else if (painter.layerCount > 0) {
                 for index in 1...painter.layerCount-1 {
-                    let color = painter.stillImage.layerAtIndex(index).fillColor
-                    let components = CGColorGetComponents(color.CGColor)
+                    let color = painter.stillImage.layer(at: index).fillColor
+                    let components = (color?.cgColor)?.components
                     let button = appendButton()
-                    if (components[3] == 0) {
+                    if (components?[3] == 0) {
                         button.backgroundColor = self.tintColor
                     } else {
                         button.backgroundColor = color
@@ -74,8 +74,8 @@ class Palette: UIView {
                 } else if let layer = painter.editLayer {
                     if let userData = layer.userData {
                         if let colorID = userData["colorId"] as? String {
-                            let url = NSURL(string: colorID)
-                            let object = CBCoreData.sharedInstance().getObjectWithUrl(url)
+                            let url = URL(string: colorID)
+                            let object = (CBCoreData.sharedInstance() as AnyObject).getObjectWith(url)
                             return object as? Color
                         }
                     }
@@ -94,9 +94,9 @@ class Palette: UIView {
                 } else if let layer = painter.editLayer {
                     if let userData = layer.userData {
                         if (newValue == nil) {
-                            userData.removeObjectForKey("colorId")
+                            userData.removeObject(forKey: "colorId")
                         } else {
-                            userData["colorId"] = String(newValue.objectID.URIRepresentation().absoluteURL)
+                            userData["colorId"] = String(describing: newValue.objectID.uriRepresentation().absoluteURL)
                         }
                     }
                 }
@@ -113,7 +113,7 @@ class Palette: UIView {
     }
     
     // MARK: - Public Methods
-    func getButtonAtIndex(index:Int) -> PaletteButton? {
+    func getButtonAtIndex(_ index:Int) -> PaletteButton? {
         if (index >= 0 && index < self.subviews.count) {
             if let button = self.subviews[self.subviews.count - index - 1] as? PaletteButton {
                 return button
@@ -147,11 +147,11 @@ class Palette: UIView {
             buttonSize.width = fmin(buttonSize.width, superview.frame.size.width / 5.0)
         }
         
-        let newButton = PaletteButton(type: UIButtonType.System)
+        let newButton = PaletteButton(type: UIButtonType.system)
         newButton.frame = CGRect(x: 0, y: 0, width: buttonSize.width, height: buttonSize.height)
         newButton.backgroundColor = self.tintColor
         newButton.tintColor = self.tintColor
-        newButton.addTarget(self, action: "pressed:", forControlEvents: .TouchUpInside)
+        newButton.addTarget(self, action: #selector(Palette.pressed(_:)), for: .touchUpInside)
         newButton.tag = self.subviews.count
         newButton.palette = self
         if self.subviews.count > 0 {
@@ -165,7 +165,7 @@ class Palette: UIView {
         return newButton
     }
     
-    func removeButtonAtIndex(index: Int) -> Bool {
+    func removeButtonAtIndex(_ index: Int) -> Bool {
         if (self.subviews.count > 1 && index < self.subviews.count) {
             if let button = getButtonAtIndex(index) {
                 button.removeFromSuperview()
@@ -182,14 +182,14 @@ class Palette: UIView {
         let newWidth = self.buttonSize.width * CGFloat(self.subviews.count)
         let xOffset = widthBefore - newWidth
         
-        UIView.animateWithDuration(0.3, delay: 0.0, options: .CurveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.3, delay: 0.0, options: UIViewAnimationOptions(), animations: {
             self.frame.origin.x = self.frame.origin.x + xOffset
             self.frame.size.width = newWidth
             var index = 0
             for view in self.subviews {
                 if let button = view as? PaletteButton {
                     button.frame.origin.x = self.buttonSize.width * CGFloat(index)
-                    index++
+                    index += 1
                 }
             }
             }, completion: { finished in
@@ -198,7 +198,7 @@ class Palette: UIView {
         
     }
     
-    func buttonIsCurrentLayer(button: PaletteButton) {
+    func buttonIsCurrentLayer(_ button: PaletteButton) {
         if (button != selectedButton) {
             selectedButton?.isCurrentLayer = false
             selectedButton = button
@@ -208,7 +208,7 @@ class Palette: UIView {
         }
     }
     
-    func pressed(button: PaletteButton!) {
+    func pressed(_ button: PaletteButton!) {
         button.isCurrentLayer = true
         self.delegate?.paletteColorPressed(button, index: button.tag)
     }

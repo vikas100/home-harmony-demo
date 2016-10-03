@@ -15,9 +15,9 @@ class FadeSegue:UIStoryboardSegue  {
         
         transition.type = kCATransitionFade; //kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
         transition.duration = 1.0
-        sourceViewController.view.window?.layer.addAnimation(transition, forKey: "kCATransition")
+        source.view.window?.layer.add(transition, forKey: "kCATransition")
         //print("%@", sourceViewController);
-        sourceViewController.showDetailViewController(destinationViewController, sender: sourceViewController)
+        source.showDetailViewController(destination, sender: source)
         //sourceViewController.navigationController?.pushViewController(destinationViewController, animated: false)
     }
 }
@@ -31,7 +31,7 @@ class LaunchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.hidden = true
+        self.navigationController?.navigationBar.isHidden = true
         //self.navigationController?.navigationBar.hidden = true
         // Do any additional setup after loading the view.
     }
@@ -42,19 +42,19 @@ class LaunchViewController: UIViewController {
     }
     
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         var endPoint = CGRect(x: -4, y: 90, width:300,  height:70)
-        if (UIDevice.currentDevice().userInterfaceIdiom == .Pad) {
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
             endPoint = CGRect(x: 0, y: 210, width:300,  height:70)
         }
         if (initialPosition == nil) {
             initialPosition = self.appIconView.frame
         }
         self.appIconView.frame = initialPosition
-        UIView.animateWithDuration(0.5, delay: 0.5, options: .CurveEaseOut, animations: {
+        UIView.animate(withDuration: 0.5, delay: 0.5, options: .curveEaseOut, animations: {
                 self.appIconView.frame = endPoint
             }, completion: { finished in
-                self.performSegueWithIdentifier("startApp", sender: self)
+                self.performSegue(withIdentifier: "startApp", sender: self)
                 
         })
     }

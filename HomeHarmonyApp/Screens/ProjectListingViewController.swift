@@ -19,7 +19,7 @@ class ProjectListingViewController: UITableViewController {
     
     weak internal var delegate: ProjectCellDelegate?
     
-    private var projects: [Project] = []
+    fileprivate var projects: [Project] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,8 +27,8 @@ class ProjectListingViewController: UITableViewController {
         reloadTable()
     }
     
-    override func viewWillAppear(animated: Bool) {
-        self.navigationController?.navigationBar.hidden = false
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = false
     }
     
     func reloadTable() {
@@ -62,19 +62,19 @@ class ProjectListingViewController: UITableViewController {
     
     // MARK: UICollectionViewDataSource
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.projects.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier) as? ProjectTableViewCell else { fatalError("Expected to display a ProjectTableViewCell") }
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as? ProjectTableViewCell else { fatalError("Expected to display a ProjectTableViewCell") }
         
-        let project = self.projects[indexPath.row]
+        let project = self.projects[(indexPath as NSIndexPath).row]
         
         cell.thumbnail.image = project.previewImage
         cell.titleLabel.text = project.name
@@ -82,26 +82,26 @@ class ProjectListingViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
     }
     
-    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]  {
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]  {
         
-        let project = self.projects[indexPath.row]
+        let project = self.projects[(indexPath as NSIndexPath).row]
         
-        let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Delete" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
+        let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Delete" , handler: { (action:UITableViewRowAction!, indexPath:IndexPath!) -> Void in
             
-            let deleteMenu = UIAlertController(title: nil, message: "Would you like to delete this project?", preferredStyle: .ActionSheet)
+            let deleteMenu = UIAlertController(title: nil, message: "Would you like to delete this project?", preferredStyle: .actionSheet)
             
-            let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.Default,  handler: {
+            let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default,  handler: {
                 (alert: UIAlertAction!) -> Void in
                 print("Deleted")
                 tableView.setEditing(false, animated: true)
                 ProjectDatabase.sharedDatabase().removeProject(project.projectID)
                 self.reloadTable()
             })
-            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel,  handler: {
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel,  handler: {
                 (alert: UIAlertAction!) -> Void in
                 print("Cancelled")
                 tableView.setEditing(false, animated: true)
@@ -112,18 +112,18 @@ class ProjectListingViewController: UITableViewController {
             
             presentActionSheet(deleteMenu, viewController: self)
         })
-        deleteAction.backgroundColor = UIColor.redColor()
+        deleteAction.backgroundColor = UIColor.red
         
         // 3
-        let copyAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Copy" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
+        let copyAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Copy" , handler: { (action:UITableViewRowAction!, indexPath:IndexPath!) -> Void in
             tableView.setEditing(false, animated: true)
             
             let newName = "\(project.name) copy"
             
-            let chooseNameAlert = UIAlertController(title: "Project Name", message: "Enter a name for this project", preferredStyle: UIAlertControllerStyle.Alert)
+            let chooseNameAlert = UIAlertController(title: "Project Name", message: "Enter a name for this project", preferredStyle: UIAlertControllerStyle.alert)
             //chooseNameAlert.textFields![0].text = newName
             
-            chooseNameAlert.addAction(UIAlertAction(title: "Save", style: .Default, handler:  {
+            chooseNameAlert.addAction(UIAlertAction(title: "Save", style: .default, handler:  {
                 (alert: UIAlertAction!) -> Void in
                 var chosenName = chooseNameAlert.textFields![0].text
                 if (chosenName == nil) {
@@ -134,12 +134,12 @@ class ProjectListingViewController: UITableViewController {
                 self.reloadTable()
             }))
             
-            chooseNameAlert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler:nil))
-            chooseNameAlert.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
+            chooseNameAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler:nil))
+            chooseNameAlert.addTextField(configurationHandler: {(textField: UITextField!) in
                 textField.placeholder = "Enter Project Name:"
                 textField.text = newName
             })
-            self.presentViewController(chooseNameAlert, animated: true, completion: nil)
+            self.present(chooseNameAlert, animated: true, completion: nil)
             
             
         })
@@ -148,8 +148,8 @@ class ProjectListingViewController: UITableViewController {
         return [deleteAction,copyAction]
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let project = self.projects[indexPath.row]
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let project = self.projects[(indexPath as NSIndexPath).row]
         self.delegate?.projectSelected(project.path)
     }
 }

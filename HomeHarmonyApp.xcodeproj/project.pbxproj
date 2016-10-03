@@ -66,7 +66,6 @@
 		E7E29E781BFBD2EB001B5D49 /* LandingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7E29E741BFBD2EB001B5D49 /* LandingViewController.swift */; };
 		E7E29E791BFBD2EB001B5D49 /* AugmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7E29E751BFBD2EB001B5D49 /* AugmentedViewController.swift */; };
 		E7E29E7C1BFBD394001B5D49 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7E29E7B1BFBD394001B5D49 /* Accelerate.framework */; };
-		E7F4E9501D51BAEE0032A9EF /* HomeAugmentation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7F4E94F1D51BAEE0032A9EF /* HomeAugmentation.framework */; };
 		E7F4E9511D51BAEE0032A9EF /* HomeAugmentation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E7F4E94F1D51BAEE0032A9EF /* HomeAugmentation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -168,7 +167,6 @@
 				E715EE361BFBD41300A148B3 /* ImageIO.framework in Frameworks */,
 				E7449B7D1C10CF4800E6F88E /* Photos.framework in Frameworks */,
 				E715EE341BFBD3E800A148B3 /* CoreMotion.framework in Frameworks */,
-				E7F4E9501D51BAEE0032A9EF /* HomeAugmentation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +338,7 @@
 					E7A84ADE1BF9A5B9006572E9 = {
 						CreatedOnToolsVersion = 7.1.1;
 						DevelopmentTeam = 487F34SCQ8;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -570,6 +569,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.doubleip.mobile.durostickcolors;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "HomeHarmonyApp/HomeHarmonyApp-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -588,6 +588,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.doubleip.mobile.durostickcolors;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "HomeHarmonyApp/HomeHarmonyApp-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

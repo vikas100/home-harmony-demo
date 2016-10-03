@@ -33,18 +33,18 @@ class MainActionsViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.collectionView!.backgroundColor = UIColor.clearColor()
+        self.collectionView!.backgroundColor = UIColor.clear
         self.collectionView!.backgroundView = nil
         
         self.actionTitles = NSMutableArray()
         self.actionImages = NSMutableArray()
         
-        self.actionTitles.addObject(NSLocalizedString("Visualizer", comment: ""))
-        self.actionImages.addObject(UIImage(named: "VisualizerAction")!)
-        self.actionTitles.addObject(NSLocalizedString("Sample Room", comment: ""))
-        self.actionImages.addObject(UIImage(named: "SamplesAction")!)
-        self.actionTitles.addObject(NSLocalizedString("Match a Photo", comment: ""))
-        self.actionImages.addObject(UIImage(named: "SwatchesAction")!)
+        self.actionTitles.add(NSLocalizedString("Visualizer", comment: ""))
+        self.actionImages.add(UIImage(named: "VisualizerAction")!)
+        self.actionTitles.add(NSLocalizedString("Sample Room", comment: ""))
+        self.actionImages.add(UIImage(named: "SamplesAction")!)
+        self.actionTitles.add(NSLocalizedString("Match a Photo", comment: ""))
+        self.actionImages.add(UIImage(named: "SwatchesAction")!)
         
     }
 
@@ -65,39 +65,39 @@ class MainActionsViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDataSource
 
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
         return actionTitles.count
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as? MainActionCell else { fatalError("Expected to display a MainActionCell") }
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? MainActionCell else { fatalError("Expected to display a MainActionCell") }
         // Configure the cell
 
-        cell.actionLabel.text = self.actionTitles[indexPath.row] as? String
-        cell.actionImageView.image = self.actionImages[indexPath.row] as? UIImage
+        cell.actionLabel.text = self.actionTitles[(indexPath as NSIndexPath).row] as? String
+        cell.actionImageView.image = self.actionImages[(indexPath as NSIndexPath).row] as? UIImage
         
         return cell
     }
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == 0 {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).row == 0 {
             self.delegate?.visualizerAction()
         }
-        else if indexPath.row == 1 {
+        else if (indexPath as NSIndexPath).row == 1 {
             self.delegate?.samplesAction()
         }
-        else if indexPath.row == 2 {
+        else if (indexPath as NSIndexPath).row == 2 {
             self.delegate?.colorsAction()
         }
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         
         let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout
         let horizSpacing = flowLayout?.sectionInset.left

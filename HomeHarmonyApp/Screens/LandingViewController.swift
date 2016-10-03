@@ -11,7 +11,7 @@ import Photos
 
 struct TutorialStep {
     var text:String
-    var duration:NSTimeInterval
+    var duration:TimeInterval
     var view:UIView! = nil
 }
 
@@ -34,36 +34,36 @@ class LandingViewController: UIViewController, SampleCellDelegate, ProjectCellDe
     @IBOutlet weak var tutorialOpeningHeight: NSLayoutConstraint!
     @IBOutlet weak var tutorialSkipButton: UIButton!
     
-    private var selectedProjectPath: String!
-    private var isSample = false
-    private var colorFinderImage:UIImage!
+    fileprivate var selectedProjectPath: String!
+    fileprivate var isSample = false
+    fileprivate var colorFinderImage:UIImage!
     
-    private var mainActionsVC:MainActionsViewController!
+    fileprivate var mainActionsVC:MainActionsViewController!
     
-    private var tutorialSteps: [TutorialStep] = []
+    fileprivate var tutorialSteps: [TutorialStep] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tutorialView.hidden = true
+        self.tutorialView.isHidden = true
         
         
     }
     
-    override func viewWillAppear(animated: Bool) {
-        self.navigationController?.navigationBar.hidden = true
-        projectsView.hidden = ProjectDatabase.sharedDatabase().count == 0
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = true
+        projectsView.isHidden = ProjectDatabase.sharedDatabase().count == 0
         
         
     }
     
     override func viewDidLayoutSubviews() {
         
-        let availableHeight = self.view.frame.height - CGRectGetMinY(mainAction.frame)
+        let availableHeight = self.view.frame.height - mainAction.frame.minY
         
         let eachHeight = availableHeight / 3
         
         mainActionHeight.constant = eachHeight
-        projectsHeight.constant = projectsView.hidden ? 0 : eachHeight
+        projectsHeight.constant = projectsView.isHidden ? 0 : eachHeight
         samplesHeight.constant = eachHeight
         
         mainAction.layoutIfNeeded()
@@ -71,16 +71,18 @@ class LandingViewController: UIViewController, SampleCellDelegate, ProjectCellDe
         samplesView.layoutIfNeeded()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         if (!UserPreferences.sharedPreferences().hasSeenLandingInstructions) {
             //setup tutorial
             tutorialSteps.append(TutorialStep(text: NSLocalizedString("TutorialStep1", comment: ""), duration:5, view:nil))
             tutorialSteps.append(TutorialStep(text: NSLocalizedString("TutorialStep2", comment: ""), duration:5, view:nil))
             tutorialSteps.append(TutorialStep(text: NSLocalizedString("TutorialStep3", comment: ""), duration:5, view:nil))
             
-            for var i = 0; i < mainActionsVC.collectionView!.numberOfItemsInSection(0) && i < tutorialSteps.count; i++
+            let limit = min(mainActionsVC.collectionView!.numberOfItems(inSection: 0), tutorialSteps.count)
+            
+            for i in 0..<limit
             {
-                if let cell = mainActionsVC.collectionView!.cellForItemAtIndexPath(NSIndexPath(forRow: i, inSection: 0)) {
+                if let cell = mainActionsVC.collectionView!.cellForItem(at: IndexPath(row: i, section: 0)) {
                     tutorialSteps[i].view = cell
                 }
             }
@@ -88,33 +90,33 @@ class LandingViewController: UIViewController, SampleCellDelegate, ProjectCellDe
         }
     }
 
-    @IBAction func skipStep(sender: AnyObject) {
+    @IBAction func skipStep(_ sender: AnyObject) {
         showTutorialStep(currentStep + 1)
     }
     
     var currentStep = -1
     func showTutorial() {
         currentStep = -1
-        self.tutorialSkipButton.hidden = true
+        self.tutorialSkipButton.isHidden = true
         self.tutorialView.alpha = 0.0
-        self.tutorialLabel.hidden = true
-        self.tutorialView.hidden = false
+        self.tutorialLabel.isHidden = true
+        self.tutorialView.isHidden = false
         self.tutorialOpeningWidth.constant = 0
         self.tutorialOpeningHeight.constant = 0
         
-        UIView.animateWithDuration(1.0, delay: 1.0, options: .CurveEaseOut, animations: {
+        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveEaseOut, animations: {
             self.tutorialView.alpha = 1.0
             }, completion: { finished in
                 self.showTutorialStep(0)
         })
         
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(3.0 * Double(NSEC_PER_SEC)))
-        dispatch_after(delayTime, dispatch_get_main_queue()) {
-            self.tutorialView.hidden = false
+        let delayTime = DispatchTime.now() + Double(Int64(3.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: delayTime) {
+            self.tutorialView.isHidden = false
         }
     }
     
-    func showTutorialStep(index:Int) {
+    func showTutorialStep(_ index:Int) {
         
         if (index <= currentStep) {
             return;//was skipped by user
@@ -125,22 +127,22 @@ class LandingViewController: UIViewController, SampleCellDelegate, ProjectCellDe
             let step = tutorialSteps[index]
             
             if (index < tutorialSteps.count - 1) {
-                self.tutorialSkipButton.setTitle(NSLocalizedString("TutorialSkipAny", comment: ""), forState: UIControlState.Normal)
+                self.tutorialSkipButton.setTitle(NSLocalizedString("TutorialSkipAny", comment: ""), for: UIControlState())
             } else {
-                self.tutorialSkipButton.setTitle(NSLocalizedString("TutorialSkipLast", comment: ""), forState: UIControlState.Normal)
+                self.tutorialSkipButton.setTitle(NSLocalizedString("TutorialSkipLast", comment: ""), for: UIControlState())
             }
             
             var opening = CGRect()
             if let view = step.view {
-                let point = view.superview!.convertPoint(view.frame.origin, toView: self.tutorialView)
+                let point = view.superview!.convert(view.frame.origin, to: self.tutorialView)
                 opening.origin = point
                 opening.size.width = view.bounds.size.width
                 opening.size.height = view.bounds.size.height
             }
             
-            self.tutorialSkipButton.hidden = false
-            tutorialLabel.hidden = true
-            UIView.animateWithDuration(index == 0 ? 0.2 : 0.5, delay: 0.0, options: .CurveEaseOut, animations: {
+            self.tutorialSkipButton.isHidden = false
+            tutorialLabel.isHidden = true
+            UIView.animate(withDuration: index == 0 ? 0.2 : 0.5, delay: 0.0, options: .curveEaseOut, animations: {
                 self.tutorialOpeningX.constant = opening.origin.x
                 self.tutorialOpeningY.constant = opening.origin.y
                 self.tutorialOpeningWidth.constant = opening.width
@@ -149,15 +151,15 @@ class LandingViewController: UIViewController, SampleCellDelegate, ProjectCellDe
                 }, completion: { finished in
                     self.tutorialLabel.text = step.text
                     self.tutorialLabel.alpha = 0
-                    self.tutorialLabel.hidden = false
+                    self.tutorialLabel.isHidden = false
                     
                     //Fade in text
-                    UIView.animateWithDuration(0.5, animations: { () -> Void in
+                    UIView.animate(withDuration: 0.5, animations: { () -> Void in
                         self.tutorialLabel.alpha = 1.0
                         }, completion: { finished in
                             //Wait specified time, then continue recursively
-                            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(step.duration * Double(NSEC_PER_SEC)))
-                            dispatch_after(delayTime, dispatch_get_main_queue()) {
+                            let delayTime = DispatchTime.now() + Double(Int64(step.duration * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+                            DispatchQueue.main.asyncAfter(deadline: delayTime) {
                                 self.showTutorialStep(index+1)
                             }
                     })
@@ -167,34 +169,34 @@ class LandingViewController: UIViewController, SampleCellDelegate, ProjectCellDe
             //ALL DONE
             UserPreferences.sharedPreferences().hasSeenLandingInstructions = true
             
-            UIView.animateWithDuration(0.5, delay: 0, options: .CurveEaseOut, animations: {
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
                 self.tutorialView.alpha = 0.0
                 }, completion: { finished in
-                    self.tutorialView.hidden = true
+                    self.tutorialView.isHidden = true
             })
         }
         
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let vc = segue.destinationViewController as? AugmentedViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? AugmentedViewController {
             if (nil != self.selectedProjectPath) {
                 vc.projectPath = self.selectedProjectPath
                 vc.isSample = self.isSample
             }
         }
-        else if let vc = segue.destinationViewController as? SampleTypeViewController {
+        else if let vc = segue.destination as? SampleTypeViewController {
             vc.delegate = self
-        } else if let vc = segue.destinationViewController as? SampleCollectionViewController {
+        } else if let vc = segue.destination as? SampleCollectionViewController {
             vc.delegate = self
-        } else if let vc = segue.destinationViewController as? ProjectCollectionViewController {
+        } else if let vc = segue.destination as? ProjectCollectionViewController {
             vc.delegate = self
-        } else if let vc = segue.destinationViewController as? ProjectListingViewController {
+        } else if let vc = segue.destination as? ProjectListingViewController {
             vc.delegate = self
-        } else if let vc = segue.destinationViewController as? MainActionsViewController {
+        } else if let vc = segue.destination as? MainActionsViewController {
             vc.delegate = self
             self.mainActionsVC = vc
-        } else if let vc = segue.destinationViewController as? ColorFinderViewController {
+        } else if let vc = segue.destination as? ColorFinderViewController {
             vc.image = self.colorFinderImage
             self.colorFinderImage = nil
         }
@@ -203,38 +205,38 @@ class LandingViewController: UIViewController, SampleCellDelegate, ProjectCellDe
         self.isSample = false
     }
     
-    func sampleSelected(samplePath:String) {
+    func sampleSelected(_ samplePath:String) {
         print("Selected \(samplePath)")
         self.selectedProjectPath = samplePath
         self.isSample = true
-        self.performSegueWithIdentifier("showPainter", sender: self)
+        self.performSegue(withIdentifier: "showPainter", sender: self)
     }
     
-    func projectSelected(samplePath:String) {
+    func projectSelected(_ samplePath:String) {
         print("Selected \(samplePath)")
         self.selectedProjectPath = samplePath
-        self.performSegueWithIdentifier("showPainter", sender: self)
+        self.performSegue(withIdentifier: "showPainter", sender: self)
     }
     
     func visualizerAction() {
         if (ImageManager.sharedInstance.hasCamera()) {
             ImageManager.sharedInstance.proceedWithCameraAccess(self) {
-                self.performSegueWithIdentifier("showPainter", sender: self)
+                self.performSegue(withIdentifier: "showPainter", sender: self)
             }
         } else {
-            self.performSegueWithIdentifier("showPainter", sender: self)
+            self.performSegue(withIdentifier: "showPainter", sender: self)
         }
     }
     
     func samplesAction() {
-        self.performSegueWithIdentifier("showSamples", sender: self)
+        self.performSegue(withIdentifier: "showSamples", sender: self)
     }
     
     func colorsAction() {
         ImageManager.sharedInstance.getImage(self) { (image) -> Void in
             if let _ = image {
                 self.colorFinderImage = image
-                self.performSegueWithIdentifier("showColorFinder", sender: self)
+                self.performSegue(withIdentifier: "showColorFinder", sender: self)
             }
         }
     }

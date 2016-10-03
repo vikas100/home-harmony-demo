@@ -11,7 +11,7 @@ import Foundation
 private let reuseIdentifier = "OptionCell"
 
 internal protocol OptionCellDelegate : NSObjectProtocol {
-    func optionSelected(option:Option)
+    func optionSelected(_ option:Option)
 }
 
 class OptionCell: UICollectionViewCell {
@@ -39,17 +39,17 @@ class OptionsCollectionViewController: UICollectionViewController {
     weak internal var delegate: OptionCellDelegate?
     var requiredWidth:CGFloat!
     
-    private var options = [Option]()
+    fileprivate var options = [Option]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.collectionView!.backgroundColor = UIColor.clearColor()
+        self.collectionView!.backgroundColor = UIColor.clear
         self.collectionView!.backgroundView = nil
         
     }
     
-    func loadOptions(options: [Option]) {
+    func loadOptions(_ options: [Option]) {
         self.options = options
         
         requiredWidth = 0
@@ -60,42 +60,42 @@ class OptionsCollectionViewController: UICollectionViewController {
     
     // MARK: UICollectionViewDataSource
     
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
         return self.options.count
     }
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as? OptionCell
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? OptionCell
         
-        let option = self.options[indexPath.row]
+        let option = self.options[(indexPath as NSIndexPath).row]
         
         //print("Title:\(option.title)")
         
         if let cell = cell {
-            cell.button.setTitle(option.title, forState: UIControlState.Normal)
-            cell.button.setImage(option.image, forState: UIControlState.Normal)
-            cell.button.enabled = option.enabled
-            cell.button.tag = indexPath.row
-            cell.button.addTarget(self, action: "pressed:", forControlEvents: .TouchUpInside)
+            cell.button.setTitle(option.title, for: UIControlState())
+            cell.button.setImage(option.image, for: UIControlState())
+            cell.button.isEnabled = option.enabled
+            cell.button.tag = (indexPath as NSIndexPath).row
+            cell.button.addTarget(self, action: #selector(OptionsCollectionViewController.pressed(_:)), for: .touchUpInside)
         }
         
         return cell!
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         
         let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout
         let horizSpacing = flowLayout?.minimumInteritemSpacing
         //let vertSpacing = (flowLayout?.sectionInset.top)! + (flowLayout?.sectionInset.bottom)!;
         
-        let option = self.options[indexPath.row]
+        let option = self.options[(indexPath as NSIndexPath).row]
         
         let leftoverWidth = max(self.view.frame.size.width - self.requiredWidth - horizSpacing! * CGFloat(self.options.count - 1), 0)
         let extraWidth = leftoverWidth / CGFloat(self.options.count)
@@ -104,13 +104,13 @@ class OptionsCollectionViewController: UICollectionViewController {
         return CGSize(width: width, height: self.view.frame.size.height)
     }
     
-    func pressed(button:UIButton) {
+    func pressed(_ button:UIButton) {
         let option = self.options[button.tag]
         self.delegate?.optionSelected(option)
     }
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let option = self.options[indexPath.row]
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let option = self.options[(indexPath as NSIndexPath).row]
         self.delegate?.optionSelected(option)
     }
 }

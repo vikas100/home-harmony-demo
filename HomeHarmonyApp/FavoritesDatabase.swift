@@ -9,26 +9,26 @@
 import Foundation
 
 class Favorite: NSObject, NSCoding {
-    var objectID: NSURL;
-    var createDate: NSDate;
+    var objectID: URL;
+    var createDate: Date;
     
     init(favorite:NSManagedObject) {
-        self.objectID = favorite.objectID.URIRepresentation()
-        self.createDate = NSDate()
+        self.objectID = favorite.objectID.uriRepresentation()
+        self.createDate = Date()
     }
     
     required init(coder aDecoder: NSCoder) {
-        objectID = aDecoder.decodeObjectForKey("objectID") as! NSURL
-        createDate = aDecoder.decodeObjectForKey("createDate") as! NSDate
+        objectID = aDecoder.decodeObject(forKey: "objectID") as! URL
+        createDate = aDecoder.decodeObject(forKey: "createDate") as! Date
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(objectID, forKey: "objectID")
-        aCoder.encodeObject(createDate, forKey: "createDate")
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(objectID, forKey: "objectID")
+        aCoder.encode(createDate, forKey: "createDate")
     }
     
     func getObject() -> NSManagedObject! {
-        if let favorite = CBCoreData.sharedInstance().getObjectWithUrl(self.objectID) as? NSManagedObject {
+        if let favorite = (CBCoreData.sharedInstance() as AnyObject).getObjectWith(self.objectID) as? NSManagedObject {
             return favorite
         }
         return nil
@@ -37,17 +37,17 @@ class Favorite: NSObject, NSCoding {
 
 class FavoritesDatabase: NSMutableDictionary {
     
-    private var database: NSMutableDictionary!
+    fileprivate var database: NSMutableDictionary!
     
     static var singleton : FavoritesDatabase!
     
     internal class func sharedDatabase() -> FavoritesDatabase {
         if (singleton == nil) {
             singleton = FavoritesDatabase()
-            let prefs = NSUserDefaults.standardUserDefaults();
+            let prefs = UserDefaults.standard;
             
-            if let db = prefs.objectForKey("favorites") as? NSData {
-                if let unarchived = NSKeyedUnarchiver.unarchiveObjectWithData(db) as? NSDictionary {
+            if let db = prefs.object(forKey: "favorites") as? Data {
+                if let unarchived = NSKeyedUnarchiver.unarchiveObject(with: db) as? NSDictionary {
                     singleton.database = unarchived.mutableCopy() as? NSMutableDictionary
                 }
             } else {
@@ -58,35 +58,35 @@ class FavoritesDatabase: NSMutableDictionary {
     }
     
     func save() {
-        let prefs = NSUserDefaults.standardUserDefaults();
+        let prefs = UserDefaults.standard;
         
-        let archivedObject = NSKeyedArchiver.archivedDataWithRootObject(database)
-        prefs.setObject(archivedObject, forKey: "favorites")
+        let archivedObject = NSKeyedArchiver.archivedData(withRootObject: database)
+        prefs.set(archivedObject, forKey: "favorites")
         
-        NSUserDefaults.standardUserDefaults().synchronize()
+        UserDefaults.standard.synchronize()
     }
     
-    func isFavorite(favorite:NSManagedObject) -> Bool {
-        return database[favorite.objectID.URIRepresentation()] != nil
+    func isFavorite(_ favorite:NSManagedObject) -> Bool {
+        return database[favorite.objectID.uriRepresentation()] != nil
     }
     
-    func addFavorite(favorite:NSManagedObject) {
+    func addFavorite(_ favorite:NSManagedObject) {
         //print("favorite=\(favorite.objectID.URIRepresentation())");
         
-        database[favorite.objectID.URIRepresentation()] = Favorite(favorite: favorite)
+        database[favorite.objectID.uriRepresentation()] = Favorite(favorite: favorite)
         save()
     }
     
-    func removeFavorite(favorite:NSManagedObject) {
-        removeObjectForKey(favorite.objectID.URIRepresentation())
+    func removeFavorite(_ favorite:NSManagedObject) {
+        removeObject(forKey: favorite.objectID.uriRepresentation())
         save()
     }
     
-    override func removeObjectForKey(aKey: AnyObject) {
-        database.removeObjectForKey(aKey)
+    override func removeObject(forKey aKey: Any) {
+        database.removeObject(forKey: aKey)
     }
     
-    override func setObject(anObject: AnyObject, forKey aKey: NSCopying) {
+    override func setObject(_ anObject: Any, forKey aKey: NSCopying) {
         database.setObject(anObject, forKey: aKey)
     }
     
@@ -96,8 +96,8 @@ class FavoritesDatabase: NSMutableDictionary {
         }
     }
     
-    override func objectForKey(aKey: AnyObject) -> AnyObject? {
-        return database.objectForKey(aKey)
+    override func object(forKey aKey: Any) -> Any? {
+        return database.object(forKey: aKey)
     }
     
     override func keyEnumerator() -> NSEnumerator {
@@ -105,15 +105,15 @@ class FavoritesDatabase: NSMutableDictionary {
     }
     
     var sortedKeys: [AnyObject] {
-        let sortedKeys = database.allKeys.sort { (objectA, objectB) -> Bool in
-            if let favoriteA = database[(objectA as? NSURL)!] as? Favorite {
-                if let favoriteB = database[(objectB as? NSURL)!] as? Favorite {
+        let sortedKeys = database.allKeys.sorted { (objectA, objectB) -> Bool in
+            if let favoriteA = database[(objectA as? URL)!] as? Favorite {
+                if let favoriteB = database[(objectB as? URL)!] as? Favorite {
                     //return projectA.modifiedDate.timeIntervalSince1970 < projectB.modifiedDate.timeIntervalSince1970
-                    return favoriteA.createDate.compare(favoriteB.createDate) == NSComparisonResult.OrderedDescending
+                    return favoriteA.createDate.compare(favoriteB.createDate) == ComparisonResult.orderedDescending
                 }
             }
             return false;
         }
-        return sortedKeys
+        return sortedKeys as [AnyObject]
     }
 }
