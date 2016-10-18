@@ -12,7 +12,7 @@ Git LFS may be found here: https://git-lfs.github.com/
 Embed the binary into your project by dropping the framework into the Embedded Binaries section.
 
 ###### Run Script Build phase:
-Add the following shell script as a "New Run Script" in XCode for your app's target. This is necessary to strip out the x86 contents prior to release to the app store or installation onto a device. We must package both the x86 and arm slices in one embedded binary. Because apple does not provide this facility, this script is necessary
+Add the following shell script as a "New Run Script" in XCode for your app's target. This is necessary to strip out the x86 contents prior to release to the app store or installation onto a device. We must package both the x86 and arm slices in one embedded binary. Because apple does not provide this facility, this script is necessary. *Important: this must be the last script in the process.*
 
 ```
 if [ -f "${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/HomeAugmentation.framework/strip-frameworks.sh" ]; then
