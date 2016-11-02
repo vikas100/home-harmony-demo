@@ -45,6 +45,8 @@
 		E7449B5E1C0F9C1E00E6F88E /* HamburgerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7449B5D1C0F9C1E00E6F88E /* HamburgerButton.swift */; };
 		E7449B7D1C10CF4800E6F88E /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7449B7C1C10CF4800E6F88E /* Photos.framework */; };
 		E7449B7F1C10D65800E6F88E /* ImageLibaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7449B7E1C10D65700E6F88E /* ImageLibaryButton.swift */; };
+		E746CD5A1DA2CE9A0081901E /* HomeAugmentation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E746CD591DA2CE9A0081901E /* HomeAugmentation.framework */; };
+		E746CD5B1DA2CE9A0081901E /* HomeAugmentation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E746CD591DA2CE9A0081901E /* HomeAugmentation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E74AF5B81C1B4E0A00CFE071 /* ColorPickerMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74AF5B71C1B4E0A00CFE071 /* ColorPickerMarker.swift */; };
 		E75C7D8F1C115B8E00DEA3BD /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75C7D8E1C115B8E00DEA3BD /* Palette.swift */; };
 		E75C7DAF1C1537FC00DEA3BD /* OptionsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75C7DAE1C1537FC00DEA3BD /* OptionsCollectionViewController.swift */; };
@@ -66,17 +68,16 @@
 		E7E29E781BFBD2EB001B5D49 /* LandingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7E29E741BFBD2EB001B5D49 /* LandingViewController.swift */; };
 		E7E29E791BFBD2EB001B5D49 /* AugmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7E29E751BFBD2EB001B5D49 /* AugmentedViewController.swift */; };
 		E7E29E7C1BFBD394001B5D49 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7E29E7B1BFBD394001B5D49 /* Accelerate.framework */; };
-		E7F4E9511D51BAEE0032A9EF /* HomeAugmentation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E7F4E94F1D51BAEE0032A9EF /* HomeAugmentation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		E779261B1D51AF8A00196A06 /* Embed Frameworks */ = {
+		E746CD5C1DA2CE9A0081901E /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E7F4E9511D51BAEE0032A9EF /* HomeAugmentation.framework in Embed Frameworks */,
+				E746CD5B1DA2CE9A0081901E /* HomeAugmentation.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -132,6 +133,7 @@
 		E7449B5D1C0F9C1E00E6F88E /* HamburgerButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HamburgerButton.swift; sourceTree = "<group>"; };
 		E7449B7C1C10CF4800E6F88E /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		E7449B7E1C10D65700E6F88E /* ImageLibaryButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLibaryButton.swift; sourceTree = "<group>"; };
+		E746CD591DA2CE9A0081901E /* HomeAugmentation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HomeAugmentation.framework; sourceTree = "<group>"; };
 		E74AF5B71C1B4E0A00CFE071 /* ColorPickerMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPickerMarker.swift; sourceTree = "<group>"; };
 		E75C7D8E1C115B8E00DEA3BD /* Palette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
 		E75C7DAE1C1537FC00DEA3BD /* OptionsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionsCollectionViewController.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				E715EE361BFBD41300A148B3 /* ImageIO.framework in Frameworks */,
 				E7449B7D1C10CF4800E6F88E /* Photos.framework in Frameworks */,
 				E715EE341BFBD3E800A148B3 /* CoreMotion.framework in Frameworks */,
+				E746CD5A1DA2CE9A0081901E /* HomeAugmentation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +230,7 @@
 		E7A84AD61BF9A5B9006572E9 = {
 			isa = PBXGroup;
 			children = (
+				E746CD591DA2CE9A0081901E /* HomeAugmentation.framework */,
 				E7F4E94F1D51BAEE0032A9EF /* HomeAugmentation.framework */,
 				E7A84AE11BF9A5B9006572E9 /* HomeHarmonyApp */,
 				E71A36D01BF9ADB100F5C36E /* Frameworks */,
@@ -313,8 +317,8 @@
 				E7A84ADB1BF9A5B9006572E9 /* Sources */,
 				E7A84ADC1BF9A5B9006572E9 /* Frameworks */,
 				E7A84ADD1BF9A5B9006572E9 /* Resources */,
-				E779261B1D51AF8A00196A06 /* Embed Frameworks */,
 				E779262C1D51BAA100196A06 /* ShellScript */,
+				E746CD5C1DA2CE9A0081901E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
